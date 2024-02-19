@@ -461,12 +461,93 @@ if (window.location.href.includes("meet.google.com")) {
       }
     }, 1000);
 
+    // const checkVideoStarted = setInterval(() => {
+    //   const targetElement = document.querySelector('.koV58');
+    //   if (targetElement) {
+    //     const imgElement = targetElement.querySelector("img");
+    //     const videoElement = targetElement.querySelector("video");
+    
+    //     if (videoElement && getComputedStyle(videoElement).display !== "none") {
+    //       console.log('Шлях до фото:', imgElement.getAttribute("src"));
+
+    //       participantsArray.forEach((element) => {
+    //         if(element.image === imgElement.getAttribute("src")){
+    //           console.log("AA", element.name);
+    //         }
+    //       })
+    //     }
+    //   }
+    // }, 1000);
+
+    // const checkVideoStarted = setInterval(() => {
+    //   const targetElement = document.querySelector('.koV58');
+    //   if (targetElement) {
+    //     const imgElement = targetElement.querySelector("img");
+    //     const videoElements = targetElement.querySelectorAll("video");
+    
+    //     // Перевірка, чи є хоча б один відео-елемент видимим
+    //     const visibleVideoElements = Array.from(videoElements).filter(videoElement =>
+    //       videoElement && getComputedStyle(videoElement).display !== "none"
+    //       );
+          
+    //       if (visibleVideoElements.length > 0) {
+    //       console.log('Шлях до фото:', imgElement.getAttribute("src"));
+    
+    //       // Пошук учасника за зображенням у participantsArray
+    //       participantsArray.forEach((element) => {
+    //         if (element.image === imgElement.getAttribute("src")) {
+    //           console.log("AA", element.name);
+    //         }
+    //       });
+          
+    //       // Виведення ідентифікаторів видимих відео-елементів
+    //       visibleVideoElements.forEach((videoElement) => {
+    //         const uid = videoElement.getAttribute("data-uid");
+    //         console.log('Видимий елемент відео з data-uid:', uid);
+    //       });
+    //     }
+    //   }
+    // }, 1000);
+    
+
+    const checkVideoStarted = setInterval(() => {
+      const targetElements = document.querySelectorAll('.koV58');
+      
+      targetElements.forEach(targetElement => {
+        const imgElement = targetElement.querySelector("img");
+        const videoElements = targetElement.querySelectorAll("video");
+    
+        // Перевірка, чи є хоча б один відео-елемент видимим
+        const visibleVideoElements = Array.from(videoElements).filter(videoElement =>
+          videoElement && getComputedStyle(videoElement).display !== "none"
+        );
+    
+        if (visibleVideoElements.length > 0) {
+          console.log('Шлях до фото:', imgElement.getAttribute("src"));
+    
+          // Пошук учасника за зображенням у participantsArray
+          participantsArray.forEach((element) => {
+            if (element.image === imgElement.getAttribute("src")) {
+              console.log("AA", element.name);
+            }
+          });
+    
+          // Виведення ідентифікаторів видимих відео-елементів
+          visibleVideoElements.forEach((videoElement) => {
+            const uid = videoElement.getAttribute("data-uid");
+            console.log('Видимий елемент відео з data-uid:', uid);
+          });
+        }
+      });
+    }, 1000);
+    
+    
+
     setInterval(() => {
       const userEddingMessage = document.querySelector('[jsname="Ota2jd"]');
 
       if (userEddingMessage != null) {
         const newUserNameElement = document.querySelector(".md2Vmc");
-        const newUserVideoElement = document.querySelector("video.Gv1mTb-aTv5jf");
 
         if (newUserNameElement) {
           const newUserImageElement = document.querySelector(
@@ -487,9 +568,6 @@ if (window.location.href.includes("meet.google.com")) {
 
           const newUserName = wordsWithCapitalLetters.join(" ");
           const newUserImage = newUserImageElement.getAttribute("src");
-          const newUserVideoElementId = newUserVideoElement.getAttribute("data-uid");
-
-          console.log("newUserVideoElementId", newUserVideoElementId);
 
           if (newUserName && newUserImage) {
             const isUniqueParticipant = !participantsArray.some(
@@ -566,3 +644,75 @@ function addDurations(time1, time2) {
 
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
+
+
+
+
+
+{/* <div class="p2hjYe TPpRNe" data-ssrc="338418072" style="width: 744px; height: 536px; left: 0px; top: 0px;">
+<video class="Gv1mTb-aTv5jf Gv1mTb-PVLJEc" autoplay="" playsinline="" data-uid="392" style="display: none;"></video>
+</div> */}
+
+{/* <div class="koV58 Zi94Db" jscontroller="Nl3T7" jsaction="rcuQ6b:rcuQ6b;erbPoe:gxCYh;spKgi:gxCYh;eSuw2:gxCYh;Xbdc7c:pPgyrc;sRJlAd:ygrqGc;bbU9k:IQdtVc;fIhNp:kaJnDf;GvneHb:ygrqGc;DekDzd:Gl0Q3c" data-resolution-cap="0" data-layout="roi-crop">
+  <div class="knW4sf OvyUed" jsname="Jaieyd">
+    <div class="qRU4mf uSECwd JTEhGf">
+      <div class="sCE0Tb"></div>
+      <div class="DYfzY cYKTje gjg47c" jscontroller="YQvg8b" data-second-screen="false" jsname="QgSmzd" jsaction="rcuQ6b:wfi2bd;x1hWwd:wfi2bd"></div>
+      <img alt="" jscontroller="PcYCFc" jsaction="erbPoe:rcuQ6b" src="https://lh3.googleusercontent.com/a/ACg8ocLQGU1pdXujTgAOa7Ebp_cLK4Tyi98Cg8Nq3MMnoMwK=s240-p-k-no-mo" data-size="xxxl" class="qg7mD r6DyN xm86Be JBY0Kc eXUaib" data-iml="106464.30000001192"></div>
+      </div>
+      <div jsname="Nl0j0e" class="LBDzPb">
+        <div class="p2hjYe TPpRNe" data-ssrc="3687239748" style="width: 953px; height: 536px; left: -105px; top: 0px;">
+          <video class="Gv1mTb-aTv5jf Gv1mTb-PVLJEc" autoplay="" playsinline="" data-uid="392" style="display: none;"></video>
+          </div>
+          </div>
+          </div> */}
+
+          // <div class="koV58 Zi94Db gAPJKb S7urwe" jscontroller="Nl3T7" jsaction="rcuQ6b:rcuQ6b;erbPoe:gxCYh;spKgi:gxCYh;eSuw2:gxCYh;Xbdc7c:pPgyrc;sRJlAd:ygrqGc;bbU9k:IQdtVc;fIhNp:kaJnDf;GvneHb:ygrqGc;DekDzd:Gl0Q3c" data-resolution-cap="0" data-layout="no-crop" aria-hidden="true"><div class="knW4sf OvyUed" jsname="Jaieyd">
+          //   <div class="RWK2Je">
+          //     <div class="gdIo3e XP55Ke">
+          //       <div class="BAunVd"></div>
+          //       <img alt="" jsname="YLEF4c" draggable="false" src="https://lh3.googleusercontent.com/a/ACg8ocLVPdgYfqXJagBs5XfD1P5GqpnSQ367Ezt_wNUxWGYd-30=s240-p-k-no-mo" class="qg7mD r6DyN  JBY0Kc cN5JCe" data-iml="106416.89999997616"></div>
+          //       </div>
+          //       </div>
+          //       <div jsname="Nl0j0e" class="LBDzPb">
+          //         <div class="p2hjYe TPpRNe" data-ssrc="338418072" style="width: 234px; height: 132px; left: 0px; top: 0px;">
+          //           <video class="Gv1mTb-aTv5jf Gv1mTb-PVLJEc" autoplay="" playsinline="" data-uid="435" style=""></video>
+          //           <video class="Gv1mTb-aTv5jf Gv1mTb-PVLJEc" autoplay="" playsinline="" data-uid="435" style="display: none;"></video>
+          //           </div>
+          //           </div>
+          //           </div>
+
+
+
+
+
+
+
+          // <div class="koV58 Zi94Db gAPJKb" jscontroller="Nl3T7" jsaction="rcuQ6b:rcuQ6b;erbPoe:gxCYh;spKgi:gxCYh;eSuw2:gxCYh;Xbdc7c:pPgyrc;sRJlAd:ygrqGc;bbU9k:IQdtVc;fIhNp:kaJnDf;GvneHb:ygrqGc;DekDzd:Gl0Q3c" data-resolution-cap="0" data-layout="no-crop" aria-hidden="true">
+          //   <div class="knW4sf OvyUed" jsname="Jaieyd">
+          //     <div class="RWK2Je"><div class="gdIo3e XP55Ke">
+          //       <div class="BAunVd"></div>
+          //       <img alt="" jsname="YLEF4c" draggable="false" src="https://lh3.googleusercontent.com/a/ACg8ocLVPdgYfqXJagBs5XfD1P5GqpnSQ367Ezt_wNUxWGYd-30=s240-p-k-no-mo" class="qg7mD r6DyN  JBY0Kc cN5JCe" data-iml="27540.5"></div>
+          //       </div>
+          //       </div>
+          //       <div jsname="Nl0j0e" class="LBDzPb">
+          //         <div class="p2hjYe TPpRNe" data-ssrc="4145724645" style="width: 234px; height: 132px; left: 0px; top: 0px;">
+          //           <video class="Gv1mTb-aTv5jf Gv1mTb-PVLJEc" autoplay="" playsinline="" data-uid="336" style="display: none;"></video>
+          //           <video class="Gv1mTb-aTv5jf Gv1mTb-PVLJEc" autoplay="" playsinline="" data-uid="336" style="display: none;"></video></div></div></div>
+
+
+
+          // <div class="koV58 Zi94Db" jscontroller="Nl3T7" jsaction="rcuQ6b:rcuQ6b;erbPoe:gxCYh;spKgi:gxCYh;eSuw2:gxCYh;Xbdc7c:pPgyrc;sRJlAd:ygrqGc;bbU9k:IQdtVc;fIhNp:kaJnDf;GvneHb:ygrqGc;DekDzd:Gl0Q3c" data-resolution-cap="0" data-layout="roi-crop">
+          //   <div class="knW4sf OvyUed" jsname="Jaieyd">
+          //     <div class="qRU4mf uSECwd JTEhGf">
+          //       <div class="sCE0Tb"></div>
+          //       <div class="DYfzY cYKTje gjg47c" jscontroller="YQvg8b" data-second-screen="false" jsname="QgSmzd" jsaction="rcuQ6b:wfi2bd;x1hWwd:wfi2bd"></div>
+          //       <img alt="" jscontroller="PcYCFc" jsaction="erbPoe:rcuQ6b" src="https://lh3.googleusercontent.com/a/ACg8ocLQGU1pdXujTgAOa7Ebp_cLK4Tyi98Cg8Nq3MMnoMwK=s240-p-k-no-mo" data-size="xxxl" class="qg7mD r6DyN xm86Be JBY0Kc eXUaib" data-iml="27594.19999998808"></div>
+          //       </div>
+          //       <div jsname="Nl0j0e" class="LBDzPb">
+          //         <div class="p2hjYe TPpRNe" data-ssrc="3419318181" style="width: 953px; height: 536px; left: -79px; top: 0px;">
+          //           <video class="Gv1mTb-aTv5jf Gv1mTb-PVLJEc" autoplay="" playsinline="" data-uid="291" style="display: none;"></video>
+          //           <video class="Gv1mTb-aTv5jf" autoplay="" playsinline="" data-uid="291" style="display: none;"></video>
+          //           </div>
+          //           </div>
+          //           </div>
