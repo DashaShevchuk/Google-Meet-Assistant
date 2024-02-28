@@ -234,8 +234,9 @@ if (window.location.href.includes("meet.google.com")) {
               participant.isVideoPlaying == false &&
               participantImagePath === imagePath
             ) {
+              const now = new Date();
               participant.isVideoPlaying = true;
-              console.log("start", participant);
+              participant.videoTimeStarted = now;
             }
           });
         }
@@ -262,8 +263,23 @@ if (window.location.href.includes("meet.google.com")) {
                 participant.isVideoPlaying == true &&
                 participantImagePath === imagePath
               ) {
+                const now = new Date();
+                participant.videoTimeEnded = now;
                 participant.isVideoPlaying = false;
-                console.log("end", participant);
+                if (participant.videoTime == null) {
+                  participant.videoTime = calculateDuration(
+                    participant.videoTimeStarted,
+                    participant.videoTimeEnded
+                  );
+                  participant.isVideoPlaying = false;
+                } else {
+                  const newDuration = calculateDuration(
+                    participant.videoTimeStarted,
+                    participant.videoTimeEnded
+                  );
+                  participant.videoTime = addDurations(participant.videoTime, newDuration);
+                  participant.isVideoPlaying = false;
+                }
               }
             });
           }
@@ -350,12 +366,26 @@ function calculateDuration(startTime, endTime) {
   return `${hours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
-function addDurations(existingDuration, newTime) {
-  let duration = Math.abs(existingDuration + newTime);
-  const hours = Math.floor(duration / 3600000);
-  duration -= hours * 3600000;
-  const minutes = Math.floor(duration / 60000);
-  duration -= minutes * 60000;
-  const seconds = Math.floor(duration / 1000);
-  return `${hours}:${("0" + minutes).slice(-2)}:${("0" + seconds).slice(-2)}`;
+function addDurations(time1, time2) {
+  const [hours1, minutes1, seconds1] = time1.split(":").map(Number);
+  const [hours2, minutes2, seconds2] = time2.split(":").map(Number);
+
+  const totalHours = hours1 + hours2;
+  const totalMinutes = minutes1 + minutes2;
+  const totalSeconds = seconds1 + seconds2;
+
+  const extraMinutes = Math.floor(totalSeconds / 60);
+  const remainingSeconds = totalSeconds % 60;
+  const finalMinutes = totalMinutes + extraMinutes;
+
+  const extraHours = Math.floor(finalMinutes / 60);
+  const remainingMinutes = finalMinutes % 60;
+  const finalHours = totalHours + extraHours;
+
+  const formattedHours = String(finalHours).padStart(2, "0");
+  const formattedMinutes = String(remainingMinutes).padStart(2, "0");
+  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
+
