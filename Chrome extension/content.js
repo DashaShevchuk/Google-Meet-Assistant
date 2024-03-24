@@ -342,7 +342,7 @@ if (window.location.href.includes("meet.google.com")) {
 
     const checkEndCallButton = setInterval(() => {
       const endCallButton = document.querySelector(
-        'button[data-tooltip-id="tt-c34"]'
+        'button[jsname="CQylAd"]'
       );
       if (endCallButton && !eventListenerAdded) {
         clearInterval(checkEndCallButton);
@@ -388,4 +388,3 @@ function addDurations(time1, time2) {
 
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
-
