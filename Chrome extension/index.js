@@ -108,9 +108,16 @@ function updateTable() {
           secondsStart < 10 ? "0" : ""
         }${secondsStart}`;
 
-        const formattedTimeEnd = `${hoursEnd < 10 ? "0" : ""}${hoursEnd}:${
-          minutesEnd < 10 ? "0" : ""
-        }${minutesEnd}:${secondsEnd < 10 ? "0" : ""}${secondsEnd}`;
+        let formattedTimeEnd = "";
+        if (element.conferenceEndTime !== null) {
+          formattedTimeEnd = formattedTimeEnd = `${
+            hoursEnd < 10 ? "0" : ""
+          }${hoursEnd}:${minutesEnd < 10 ? "0" : ""}${minutesEnd}:${
+            secondsEnd < 10 ? "0" : ""
+          }${secondsEnd}`;
+        } else {
+          formattedTimeEnd = " ";
+        }
 
         cellIndex.textContent = tableBody.rows.length;
         cellMeetId.textContent = element.conferenceId;
@@ -169,7 +176,7 @@ function updateTable() {
         var deleteButton = document.createElement("button");
         deleteButton.classList.add("table-button");
         deleteButton.innerHTML =
-          '<img src="./icons/orange-trash-solid.svg" width="20" height="30"/>';
+          '<img src="./icons/trash-solid.svg" width="20" height="30"/>';
         deleteButton.setAttribute("data-bs-toggle", "tooltip");
         deleteButton.setAttribute("data-bs-placement", "top");
         deleteButton.setAttribute("title", "Delete meeting");
@@ -532,8 +539,6 @@ function updatePageTheme(theme) {
   const participantsTableRows = document.querySelectorAll(
     "#participantsTableBody"
   );
-  console.log("headers", participantsTableHeaders);
-  console.log("rows", participantsTableRows);
   const paginations = document.querySelectorAll(".pagination-container");
   const itemsPerPage = document.getElementById("itemsPerPage");
   const itemsPerPageModal = document.getElementById("itemsPerModal");

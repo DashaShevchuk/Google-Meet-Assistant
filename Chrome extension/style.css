@@ -1,3 +1,4 @@
+/*Popup window style*/
 .main{
     width: 20em;
     height: 20em;
@@ -33,21 +34,18 @@ img{
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   }
 
-  /* Primary Button Styles */
   .btn-primary {
     color: #fff;
     background-color: #007bff;
     border-color: #007bff;
   }
 
-  /* Hover Styles */
   .btn:hover {
     color: #fff;
     background-color: #0056b3;
     border-color: #004d99;
   }
 
-  /* Active Styles */
   .btn:active,
   .btn.active {
     color: #fff;
