@@ -5,12 +5,22 @@ var itemsPerPage = localStorage.getItem("itemsPerPage") || 5;
 var itemsPerModal = localStorage.getItem("itemsPerModal") || 5;
 var maxVisibleButtons = 5;
 var storedConferenceData = Array();
-
+var selectedConferenceId = " ";
 function clearTable() {
   var tableBody = document.getElementById("conferenceTableBody");
   while (tableBody.firstChild) {
     tableBody.removeChild(tableBody.firstChild);
   }
+}
+function clearParticipants() {
+  var tableBody = document.getElementById("participantsTableBody");
+  while (tableBody.firstChild) {
+    tableBody.removeChild(tableBody.firstChild);
+  }
+}
+
+function renameConfernece(){
+console.log(selectedConferenceId);
 }
 
 chrome.storage.local.get(["conferenceData"], function (result) {
@@ -137,34 +147,69 @@ function updateTable() {
           document.getElementById("editModal").style.display = "flex";
           document.getElementById("meetingName").defaultValue =
             element.conferenceId;
+           console.log(element.conferenceId);
+           selectedConferenceId= element.conferenceId;
         });
 
         document
-          .getElementById("saveChangesButton")
-          .addEventListener("click", function () {
-            var newName = document.getElementById("meetingName").value;
-            var indexOfElementToUpdate = -1;
-            for (var i = 0; i < storedConferenceData.length; i++) {
-              if (
-                storedConferenceData[i].conferenceId === element.conferenceId
-              ) {
-                indexOfElementToUpdate = i;
-                break;
-              }
+    .getElementById("saveChangesButton")
+    .onclick = function() {
+        // renameConfernece();
+        console.log(element.conferenceId);
+          var newName = document.getElementById("meetingName").value;
+          console.log("confernece id",element.conferenceId );
+          var indexOfElementToUpdate = -1;
+          for (var i = 0; i < storedConferenceData.length; i++) {
+            if (
+              storedConferenceData[i].conferenceId === element.conferenceId
+            ) {
+              indexOfElementToUpdate = i;
+              
+              break;
             }
-            if (indexOfElementToUpdate !== -1) {
-              storedConferenceData[indexOfElementToUpdate].conferenceId =
-                newName;
+          }
+          console.log("index",indexOfElementToUpdate );
+          if (indexOfElementToUpdate !== -1) {
+            storedConferenceData[indexOfElementToUpdate].conferenceId =
+              newName;
+          }
+          console.log(storedConferenceData);
+          chrome.storage.local.set(
+            { conferenceData: storedConferenceData },
+            function () {
+              document.getElementById("editModal").style.display = "none";
+              updateTable();
             }
-            console.log(storedConferenceData);
-            chrome.storage.local.set(
-              { conferenceData: storedConferenceData },
-              function () {
-                document.getElementById("editModal").style.display = "none";
-                updateTable();
-              }
-            );
-          });
+          );
+    };
+          // .addEventListener("click", function () {
+          //   console.log(element.conferenceId);
+          //   var newName = document.getElementById("meetingName").value;
+          //   console.log("confernece id",element.conferenceId );
+          //   var indexOfElementToUpdate = -1;
+          //   for (var i = 0; i < storedConferenceData.length; i++) {
+          //     if (
+          //       storedConferenceData[i].conferenceId === element.conferenceId
+          //     ) {
+          //       indexOfElementToUpdate = i;
+                
+          //       break;
+          //     }
+          //   }
+          //   console.log("index",indexOfElementToUpdate );
+          //   if (indexOfElementToUpdate !== -1) {
+          //     storedConferenceData[indexOfElementToUpdate].conferenceId =
+          //       newName;
+          //   }
+          //   console.log(storedConferenceData);
+          //   chrome.storage.local.set(
+          //     { conferenceData: storedConferenceData },
+          //     function () {
+          //       document.getElementById("editModal").style.display = "none";
+          //       updateTable();
+          //     }
+          //   );
+          // });
 
         var deleteButton = document.createElement("button");
         deleteButton.classList.add("table-button");
@@ -183,7 +228,7 @@ function updateTable() {
         });
         document
           .getElementById("deleteButton")
-          .addEventListener("click", function () {
+          .onclick = function() {
             var indexOfElementToDelete = -1;
             for (var i = 0; i < storedConferenceData.length; i++) {
               if (
@@ -205,7 +250,7 @@ function updateTable() {
                 updateTable();
               }
             );
-          });
+          };
 
         var showParticipantsButton = document.createElement("button");
         showParticipantsButton.classList.add("table-button");
@@ -275,6 +320,7 @@ function updateTable() {
         }
 
         function updateParticipants() {
+          clearParticipants();
           document.getElementById("participantsModal").style.display = "flex";
           var startIndex = (currentModalPage - 1) * itemsPerModal;
           var endIndex = startIndex + itemsPerModal;
@@ -283,16 +329,14 @@ function updateTable() {
             .slice(startIndex, endIndex)
             .forEach((participant) => {
               if (participant) {
-                var participantsTableBody = document.getElementById(
-                  "participantsTableBody"
-                );
-                var newRow = participantsTableBody.insertRow();
+                var participantsTableBody = document.getElementById("participantsTableBody");
+                var newParticipantRow = participantsTableBody.insertRow();
 
-                var cellIndex = newRow.insertCell(0);
-                var cellImage = newRow.insertCell(1);
-                var cellName = newRow.insertCell(2);
-                var cellTimeInConference = newRow.insertCell(3);
-                var cellTimeWithCamera = newRow.insertCell(4);
+                var cellIndex = newParticipantRow.insertCell(0);
+                var cellImage = newParticipantRow.insertCell(1);
+                var cellName = newParticipantRow.insertCell(2);
+                var cellTimeInConference = newParticipantRow.insertCell(3);
+                var cellTimeWithCamera = newParticipantRow.insertCell(4);
 
                 cellIndex.textContent = participantsTableBody.rows.length;
                 cellName.textContent = participant.name;
@@ -309,6 +353,7 @@ function updateTable() {
               }
             });
         }
+        
 
         showParticipantsButton.addEventListener("click", updateParticipants);
 
@@ -317,7 +362,6 @@ function updateTable() {
         cellAction.appendChild(showParticipantsButton);
 
         cellAction.classList.add("d-flex", "justify-content-center");
-
         updateModalPagination();
       }
     });
@@ -425,7 +469,6 @@ function updatePageText(lang) {
   const deleteButton = document.getElementById("deleteButton");
   const deletePrefix = document.getElementById("deletePrefix");
   const deleteMiddle = document.getElementById("deleteMiddle");
-  const deleteSuffix = document.getElementById("deleteSuffix");
   const participantsTableHeaders = document.querySelectorAll(
     "#participantsTable thead th"
   );
@@ -459,7 +502,6 @@ function updatePageText(lang) {
 
     deletePrefix.textContent = "Ви впевненні що хочете видалити ";
     deleteMiddle.textContent = " з ";
-    deleteSuffix.textContent = "";
 
     const uadefaultParticipantsTableHeaders = [
       "#",
@@ -500,7 +542,6 @@ function updatePageText(lang) {
 
     deletePrefix.textContent = "Are you sure you want to delete ";
     deleteMiddle.textContent = " from ";
-    deleteSuffix.textContent = "";
 
     const defaultParticipantsTableHeaders = [
       "#",
@@ -523,23 +564,21 @@ function updatePageTheme(theme) {
   const conferencesTableHeaders = document.querySelectorAll(
     "#conferencesTable thead th"
   );
-  const conferencesTableRows = document.querySelectorAll(
-    "#conferencesTable tbody tr"
-  );
+  // const conferencesTableRows = document.querySelectorAll(
+  //   "#conferencesTable tbody tr"
+  // );
   const participantsTableHeaders = document.querySelectorAll(
     "#participantsTable thead th"
   );
-  const participantsTableRows = document.querySelectorAll(
-    "#participantsTableBody"
-  );
-  console.log("headers", participantsTableHeaders);
-  console.log("rows", participantsTableRows);
   const paginations = document.querySelectorAll(".pagination-container");
   const itemsPerPage = document.getElementById("itemsPerPage");
   const itemsPerPageModal = document.getElementById("itemsPerModal");
   const modalContent = document.querySelectorAll(".modal-content");
-  const meetingName = document.querySelector('label[for="meetingName"]');
-  const deleteText = document.querySelector(".text-container");
+
+  const meetingName = document.querySelector(
+    "#editModal .input-container label"
+  );
+  const deleteText = document.querySelectorAll("#deleteText");
 
   if (theme === "dark") {
     body.style.backgroundColor = "#1c1c1c";
@@ -554,17 +593,14 @@ function updatePageTheme(theme) {
       header.style.color = "whitesmoke";
     });
 
-    conferencesTableRows.forEach((row) => {
-      row.style.color = "whitesmoke";
-    });
+    // conferencesTableRows.forEach((row) => {
+    //   row.style.color = "whitesmoke";
+    // });
 
     participantsTableHeaders.forEach((header) => {
       header.style.color = "whitesmoke";
     });
 
-    participantsTableRows.forEach((row) => {
-      row.style.color = "whitesmoke";
-    });
     paginations.forEach((pagination) => {
       pagination.style.backgroundColor = "#373535";
     });
@@ -574,38 +610,41 @@ function updatePageTheme(theme) {
       modal.style.backgroundColor = "#373535";
     });
     meetingName.style.color = "whitesmoke";
-    deleteText.style.color = "whitesmoke";
+    deleteText.forEach((text) => {
+      text.style.color = "whitesmoke";
+    });
   } else {
-    body.style.backgroundColor = "#EEEEEE";
-    navbar.style.backgroundColor = "white";
-    littleText.style.color = "black";
+    body.style.backgroundColor = "#DDDDDD";
+    navbar.style.backgroundColor = "#EEEEEE";
+    littleText.style.color = "#1c1c1c";
     tables.forEach((table) => {
-      table.style.backgroundColor = "white";
+      table.style.backgroundColor = "#EEEEEE";
     });
     conferencesTableHeaders.forEach((header) => {
-      header.style.color = "black";
+      header.style.color = "#1c1c1c";
     });
-    conferencesTableRows.forEach((row) => {
-      row.style.color = "black";
-    });
+    // conferencesTableRows.forEach((row) => {
+    //   row.style.color = '#1c1c1c';
+    // });
     participantsTableHeaders.forEach((header) => {
-      header.style.color = "black";
-    });
-    participantsTableRows.forEach((row) => {
-      row.style.color = "black";
+      header.style.color = '#1c1c1c';
     });
     paginations.forEach((pagination) => {
-      pagination.style.backgroundColor = "white";
+      pagination.style.backgroundColor = "#EEEEEE";
     });
-    itemsPerPage.style.backgroundColor = "white";
-    itemsPerPageModal.style.backgroundColor = "white";
+    itemsPerPage.style.backgroundColor = "#EEEEEE";
+    itemsPerPageModal.style.backgroundColor = "#EEEEEE";
     modalContent.forEach((modal) => {
-      modal.style.backgroundColor = "white";
+      modal.style.backgroundColor = "#EEEEEE";
     });
-    meetingName.style.color = "black";
-    deleteText.style.color = "black";
+    meetingName.style.color = "#1c1c1c";
+    deleteText.forEach((text) => {
+      text.style.color = "#1c1c1c";
+    });
   }
 }
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const savedLang = localStorage.getItem("preferredLanguage");

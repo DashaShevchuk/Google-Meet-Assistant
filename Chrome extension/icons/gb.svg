@@ -1,24 +1,43 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="flag-icons-gb" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-	 y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
 <style type="text/css">
-	.st0{clip-path:url(#SVGID_2_);fill:#012169;}
-	.st1{clip-path:url(#SVGID_2_);fill:#FFFFFF;}
-	.st2{clip-path:url(#SVGID_2_);fill:#C8102E;}
+	.st0{fill:#012169;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:#C8102E;}
 </style>
-<g>
-	<defs>
-		<ellipse id="SVGID_1_" cx="256" cy="253.7" rx="256" ry="258.3"/>
-	</defs>
-	<clipPath id="SVGID_2_">
-		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
-	</clipPath>
-	<path class="st0" d="M0,0h512v512H0V0z"/>
-	<path class="st1" d="M512,0v64L322,256l190,187v69h-67L254,324L68,512H0v-68l186-187L0,74V0h62l192,188L440,0H512z"/>
-	<path class="st2" d="M184,324l11,34L42,512H0v-3L184,324z M308,312l54,8l150,147v45L308,312z M512,0L320,196l-4-44L466,0H512z M0,1
-		l193,189l-59-8L0,49V1z"/>
-	<path class="st1" d="M176,0v512h160V0H176z M0,176v160h512V176H0z"/>
-	<path class="st2" d="M0,208v96h512v-96H0z M208,0v512h96V0H208z"/>
+<g id="flag-icons-gb">
 </g>
+<g id="Layer_2">
+	<g>
+		<path class="st0" d="M498,176c-7.7-23.4-18.8-45.2-32.5-65l-64.3,65H498z"/>
+		<path class="st0" d="M176,13.6c-23.8,7.8-46.1,19-66.3,33.1l66.3,64.9V13.6z"/>
+		<path class="st0" d="M42.3,115.6C30,134.2,20.1,154.5,13,176h90.7L42.3,115.6z"/>
+		<path class="st0" d="M12.6,336c7.5,22.9,18.1,44.3,31.3,63.8l63.5-63.8H12.6z"/>
+		<path class="st0" d="M396.8,43.6C378.1,31.2,357.7,21.2,336,14v91.2L396.8,43.6z"/>
+		<path class="st0" d="M111.8,467.8c19.6,13.4,41.2,24.1,64.2,31.6v-96.5L111.8,467.8z"/>
+		<path class="st0" d="M336,499c22.8-7.6,44.2-18.3,63.7-31.6L336,404.7V499z"/>
+		<path class="st0" d="M467.5,399.2c13-19.3,23.5-40.6,30.9-63.2h-95.1L467.5,399.2z"/>
+		<path class="st1" d="M401.2,176l64.3-65c-8.5-12.3-18.1-23.8-28.6-34.4L339.6,176H401.2z"/>
+		<path class="st1" d="M336,404.7l63.7,62.7c13-8.9,25.1-18.9,36.2-30l-99.9-98V404.7z"/>
+		<path class="st1" d="M128,176l-75.3-74.8c-3.6,4.7-7,9.5-10.3,14.4l61.3,60.4H128z"/>
+		<path class="st1" d="M176,111.6l-66.3-64.9c-12.2,8.5-23.6,18-34.1,28.4L176,173.4V111.6z"/>
+		<path class="st1" d="M336,131.7l76.1-77.1c-4.9-3.8-10-7.5-15.3-11L336,105.1V131.7z"/>
+		<path class="st1" d="M378.3,336l78.9,77.3c3.6-4.6,7-9.3,10.3-14.1L403.3,336H378.3z"/>
+		<path class="st1" d="M107.4,336L44,399.8c8.7,12.8,18.4,24.7,29.2,35.6l98.9-99.4H107.4z"/>
+		<path class="st1" d="M176,377.1l-79.1,79.7c4.8,3.8,9.8,7.5,14.9,11l64.2-64.9V377.1z"/>
+		<path class="st2" d="M336,336v3.5l99.9,98c7.6-7.6,14.7-15.6,21.3-24.1L378.3,336H336z"/>
+		<path class="st2" d="M176,336h-3.9l-98.9,99.4c7.4,7.6,15.4,14.7,23.7,21.3l79.1-79.7V336z"/>
+		<path class="st2" d="M336,176h3.6l97.3-99.4c-7.8-7.9-16.1-15.2-24.8-22L336,131.7V176z"/>
+		<path class="st2" d="M176,176v-2.6L75.6,75.1c-8.3,8.2-15.9,16.9-23,26.2L128,176H176z"/>
+		<path class="st1" d="M208,304H4.4c2.1,10.9,4.8,21.6,8.2,32h94.8h64.6h3.9v41.1v25.7v96.5c10.4,3.4,21.1,6.1,32,8.2V304z"/>
+		<path class="st1" d="M304,304v203.4c10.9-2.1,21.6-4.9,32-8.3v-94.3v-65.3V336h42.3h25h95.1c3.4-10.4,6.1-21.1,8.2-32H304z"/>
+		<path class="st1" d="M304,208h202.4c-2.1-10.9-4.9-21.6-8.3-32h-96.9h-61.6H336v-44.3v-26.6V14c-10.4-3.4-21.1-6.2-32-8.3V208z"/>
+		<path class="st1" d="M208,208V5.4c-10.9,2.1-21.6,4.8-32,8.2v98v61.7v2.6h-48h-24.3H13c-3.4,10.4-6.2,21.1-8.3,32H208z"/>
+		<path class="st2" d="M304,304h202.6c2.9-15.4,4.4-31.3,4.4-47.5c0-16.6-1.6-32.8-4.6-48.5H304V5.6c-15.7-3-31.9-4.6-48.5-4.6
+			c-16.2,0-32.1,1.5-47.5,4.4V208H4.6c-3,15.7-4.6,31.9-4.6,48.5c0,16.2,1.5,32.1,4.4,47.5H208v203.6c15.4,2.9,31.3,4.4,47.5,4.4
+			c16.6,0,32.8-1.6,48.5-4.6V304z"/>
+	</g>
+</g>
+</svg>
