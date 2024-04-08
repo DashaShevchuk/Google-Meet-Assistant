@@ -19,10 +19,6 @@ function clearParticipants() {
   }
 }
 
-function renameConfernece(){
-console.log(selectedConferenceId);
-}
-
 chrome.storage.local.get(["conferenceData"], function (result) {
   storedConferenceData = result.conferenceData;
   updateTable();
@@ -154,7 +150,6 @@ function updateTable() {
         document
     .getElementById("saveChangesButton")
     .onclick = function() {
-        // renameConfernece();
         console.log(element.conferenceId);
           var newName = document.getElementById("meetingName").value;
           console.log("confernece id",element.conferenceId );
@@ -182,35 +177,6 @@ function updateTable() {
             }
           );
     };
-          // .addEventListener("click", function () {
-          //   console.log(element.conferenceId);
-          //   var newName = document.getElementById("meetingName").value;
-          //   console.log("confernece id",element.conferenceId );
-          //   var indexOfElementToUpdate = -1;
-          //   for (var i = 0; i < storedConferenceData.length; i++) {
-          //     if (
-          //       storedConferenceData[i].conferenceId === element.conferenceId
-          //     ) {
-          //       indexOfElementToUpdate = i;
-                
-          //       break;
-          //     }
-          //   }
-          //   console.log("index",indexOfElementToUpdate );
-          //   if (indexOfElementToUpdate !== -1) {
-          //     storedConferenceData[indexOfElementToUpdate].conferenceId =
-          //       newName;
-          //   }
-          //   console.log(storedConferenceData);
-          //   chrome.storage.local.set(
-          //     { conferenceData: storedConferenceData },
-          //     function () {
-          //       document.getElementById("editModal").style.display = "none";
-          //       updateTable();
-          //     }
-          //   );
-          // });
-
         var deleteButton = document.createElement("button");
         deleteButton.classList.add("table-button");
         deleteButton.innerHTML =
@@ -431,6 +397,7 @@ function toggleTheme() {
   }
 
   localStorage.setItem("preferredTheme", newTheme);
+  window.dispatchEvent(new Event('themeChanged'));
 }
 
 function toggleLanguage() {
@@ -453,6 +420,7 @@ function toggleLanguage() {
   }
 
   localStorage.setItem("preferredLanguage", newLang);
+  window.dispatchEvent(new Event('languageChanged'));
 }
 
 function updatePageText(lang) {
@@ -564,9 +532,6 @@ function updatePageTheme(theme) {
   const conferencesTableHeaders = document.querySelectorAll(
     "#conferencesTable thead th"
   );
-  // const conferencesTableRows = document.querySelectorAll(
-  //   "#conferencesTable tbody tr"
-  // );
   const participantsTableHeaders = document.querySelectorAll(
     "#participantsTable thead th"
   );
@@ -592,11 +557,6 @@ function updatePageTheme(theme) {
     conferencesTableHeaders.forEach((header) => {
       header.style.color = "whitesmoke";
     });
-
-    // conferencesTableRows.forEach((row) => {
-    //   row.style.color = "whitesmoke";
-    // });
-
     participantsTableHeaders.forEach((header) => {
       header.style.color = "whitesmoke";
     });
@@ -623,9 +583,6 @@ function updatePageTheme(theme) {
     conferencesTableHeaders.forEach((header) => {
       header.style.color = "#1c1c1c";
     });
-    // conferencesTableRows.forEach((row) => {
-    //   row.style.color = '#1c1c1c';
-    // });
     participantsTableHeaders.forEach((header) => {
       header.style.color = '#1c1c1c';
     });
