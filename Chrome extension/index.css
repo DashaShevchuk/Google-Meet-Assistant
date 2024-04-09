@@ -151,6 +151,19 @@ table{
     height: 50px;
   }
 
+  .badge{
+border: 2px solid #FF5200;
+color: #999999;
+font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    font-size: 10px;
+  }
+
   .clear-button-container{
     width: 95%;
     display: flex;

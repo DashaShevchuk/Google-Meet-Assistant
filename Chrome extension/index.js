@@ -68,6 +68,9 @@ function updatePagination() {
 
 function updateTable() {
   if (storedConferenceData.length > 0) {
+
+    storedConferenceData.reverse();
+    
     clearTable();
 
     var startIndex = (currentPage - 1) * itemsPerPage;
@@ -98,15 +101,27 @@ function updateTable() {
         }${month}.${year}`;
 
         const conferenceStartTimeObject = new Date(element.conferenceStartTime);
-        const conferenceEndTimeObject = new Date(element.conferenceEndTime);
+        let conferenceEndTimeObject;
+
+        if (element.conferenceEndTime !== null) {
+          conferenceEndTimeObject = new Date(element.conferenceEndTime);
+        } else {
+          conferenceEndTimeObject = "";
+        }
 
         const hoursStart = conferenceStartTimeObject.getHours();
         const minutesStart = conferenceStartTimeObject.getMinutes();
         const secondsStart = conferenceStartTimeObject.getSeconds();
 
-        const hoursEnd = conferenceEndTimeObject.getHours();
-        const minutesEnd = conferenceEndTimeObject.getMinutes();
-        const secondsEnd = conferenceEndTimeObject.getSeconds();
+        let hoursEnd = "";
+        let minutesEnd = "";
+        let secondsEnd = "";
+
+        if (conferenceEndTimeObject !== "") {
+          hoursEnd = conferenceEndTimeObject.getHours();
+          minutesEnd = conferenceEndTimeObject.getMinutes();
+          secondsEnd = conferenceEndTimeObject.getSeconds();
+        }
 
         const formattedTimeStart = `${
           hoursStart < 10 ? "0" : ""
@@ -114,12 +129,22 @@ function updateTable() {
           secondsStart < 10 ? "0" : ""
         }${secondsStart}`;
 
-        const formattedTimeEnd = `${hoursEnd < 10 ? "0" : ""}${hoursEnd}:${
-          minutesEnd < 10 ? "0" : ""
-        }${minutesEnd}:${secondsEnd < 10 ? "0" : ""}${secondsEnd}`;
+        const formattedTimeEnd =
+          conferenceEndTimeObject !== ""
+            ? `${hoursEnd < 10 ? "0" : ""}${hoursEnd}:${
+                minutesEnd < 10 ? "0" : ""
+              }${minutesEnd}:${secondsEnd < 10 ? "0" : ""}${secondsEnd}`
+            : "";
 
+          
         cellIndex.textContent = tableBody.rows.length;
         cellMeetId.textContent = element.conferenceId;
+        if (element.status === "start" || element.status === "in progress") {
+          cellMeetId.innerHTML = `${element.conferenceId} <span class="badge">in progress</span>`;
+        } else if (element.status === "end"){
+          cellMeetId.innerHTML = element.conferenceId;
+        }
+
         cellDate.textContent = formattedDate;
         cellTimeStart.textContent = formattedTimeStart;
         cellTimeEnd.textContent = formattedTimeEnd;
@@ -143,30 +168,21 @@ function updateTable() {
           document.getElementById("editModal").style.display = "flex";
           document.getElementById("meetingName").defaultValue =
             element.conferenceId;
-           console.log(element.conferenceId);
-           selectedConferenceId= element.conferenceId;
+          selectedConferenceId = element.conferenceId;
         });
 
-        document
-    .getElementById("saveChangesButton")
-    .onclick = function() {
-        console.log(element.conferenceId);
+        document.getElementById("saveChangesButton").onclick = function () {
           var newName = document.getElementById("meetingName").value;
-          console.log("confernece id",element.conferenceId );
           var indexOfElementToUpdate = -1;
           for (var i = 0; i < storedConferenceData.length; i++) {
-            if (
-              storedConferenceData[i].conferenceId === element.conferenceId
-            ) {
+            if (storedConferenceData[i].conferenceId === element.conferenceId) {
               indexOfElementToUpdate = i;
-              
+
               break;
             }
           }
-          console.log("index",indexOfElementToUpdate );
           if (indexOfElementToUpdate !== -1) {
-            storedConferenceData[indexOfElementToUpdate].conferenceId =
-              newName;
+            storedConferenceData[indexOfElementToUpdate].conferenceId = newName;
           }
           console.log(storedConferenceData);
           chrome.storage.local.set(
@@ -176,7 +192,7 @@ function updateTable() {
               updateTable();
             }
           );
-    };
+        };
         var deleteButton = document.createElement("button");
         deleteButton.classList.add("table-button");
         deleteButton.innerHTML =
@@ -192,31 +208,27 @@ function updateTable() {
           document.getElementById("conferenceTime").innerHTML =
             formattedTimeStart;
         });
-        document
-          .getElementById("deleteButton")
-          .onclick = function() {
-            var indexOfElementToDelete = -1;
-            for (var i = 0; i < storedConferenceData.length; i++) {
-              if (
-                storedConferenceData[i].conferenceId === element.conferenceId
-              ) {
-                indexOfElementToDelete = i;
-                break;
-              }
+        document.getElementById("deleteButton").onclick = function () {
+          var indexOfElementToDelete = -1;
+          for (var i = 0; i < storedConferenceData.length; i++) {
+            if (storedConferenceData[i].conferenceId === element.conferenceId) {
+              indexOfElementToDelete = i;
+              break;
             }
-            if (indexOfElementToDelete !== -1) {
-              storedConferenceData.pop(
-                storedConferenceData[indexOfElementToDelete]
-              );
-            }
-            chrome.storage.local.set(
-              { conferenceData: storedConferenceData },
-              function () {
-                document.getElementById("deleteModal").style.display = "none";
-                updateTable();
-              }
+          }
+          if (indexOfElementToDelete !== -1) {
+            storedConferenceData.pop(
+              storedConferenceData[indexOfElementToDelete]
             );
-          };
+          }
+          chrome.storage.local.set(
+            { conferenceData: storedConferenceData },
+            function () {
+              document.getElementById("deleteModal").style.display = "none";
+              updateTable();
+            }
+          );
+        };
 
         var showParticipantsButton = document.createElement("button");
         showParticipantsButton.classList.add("table-button");
@@ -295,7 +307,9 @@ function updateTable() {
             .slice(startIndex, endIndex)
             .forEach((participant) => {
               if (participant) {
-                var participantsTableBody = document.getElementById("participantsTableBody");
+                var participantsTableBody = document.getElementById(
+                  "participantsTableBody"
+                );
                 var newParticipantRow = participantsTableBody.insertRow();
 
                 var cellIndex = newParticipantRow.insertCell(0);
@@ -319,7 +333,6 @@ function updateTable() {
               }
             });
         }
-        
 
         showParticipantsButton.addEventListener("click", updateParticipants);
 
@@ -397,7 +410,7 @@ function toggleTheme() {
   }
 
   localStorage.setItem("preferredTheme", newTheme);
-  window.dispatchEvent(new Event('themeChanged'));
+  window.dispatchEvent(new Event("themeChanged"));
 }
 
 function toggleLanguage() {
@@ -420,7 +433,7 @@ function toggleLanguage() {
   }
 
   localStorage.setItem("preferredLanguage", newLang);
-  window.dispatchEvent(new Event('languageChanged'));
+  window.dispatchEvent(new Event("languageChanged"));
 }
 
 function updatePageText(lang) {
@@ -441,6 +454,7 @@ function updatePageText(lang) {
     "#participantsTable thead th"
   );
 
+  const badge = document.querySelector(".badge");
   if (lang === "ua") {
     littleTextElement.textContent = "Керуйте своїми конференціями з нами";
 
@@ -481,6 +495,8 @@ function updatePageText(lang) {
     participantsTableHeaders.forEach((header, index) => {
       header.textContent = uadefaultParticipantsTableHeaders[index];
     });
+
+    badge.textContent = "триває";
   } else {
     littleTextElement.textContent = "Controll your conferences with us";
 
@@ -521,6 +537,8 @@ function updatePageText(lang) {
     participantsTableHeaders.forEach((header, index) => {
       header.textContent = defaultParticipantsTableHeaders[index];
     });
+
+    badge.textContent = "in progress";
   }
 }
 
@@ -584,7 +602,7 @@ function updatePageTheme(theme) {
       header.style.color = "#1c1c1c";
     });
     participantsTableHeaders.forEach((header) => {
-      header.style.color = '#1c1c1c';
+      header.style.color = "#1c1c1c";
     });
     paginations.forEach((pagination) => {
       pagination.style.backgroundColor = "#EEEEEE";
@@ -600,8 +618,6 @@ function updatePageTheme(theme) {
     });
   }
 }
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
   const savedLang = localStorage.getItem("preferredLanguage");
