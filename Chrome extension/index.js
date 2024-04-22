@@ -40,17 +40,19 @@ document.getElementById("noButton").addEventListener("click", function () {
 
 chrome.storage.local.get(["conferenceData"], function (result) {
   storedConferenceData = result.conferenceData;
-  var latestConference = storedConferenceData[0];
-  var storedLatestConferenceId = localStorage.getItem("latestConferenceId");
-  if (
-    latestConference &&
-    storedLatestConferenceId !== latestConference.conferenceId
-  ) {
-    storedLatestConferenceId = latestConference.conferenceId;
-    localStorage.setItem("latestConferenceId", storedLatestConferenceId);
-    document.getElementById("logModalText").innerHTML +=
-      storedLatestConferenceId;
-    document.getElementById("isLogModal").style.display = "flex";
+  if (storedConferenceData && storedConferenceData.length > 0) {
+    var latestConference = storedConferenceData[0];
+    var storedLatestConferenceId = localStorage.getItem("latestConferenceId");
+    if (
+      latestConference &&
+      storedLatestConferenceId !== latestConference.conferenceId
+    ) {
+      storedLatestConferenceId = latestConference.conferenceId;
+      localStorage.setItem("latestConferenceId", storedLatestConferenceId);
+      document.getElementById("logModalText").innerHTML +=
+        storedLatestConferenceId;
+      document.getElementById("isLogModal").style.display = "flex";
+    }
   }
   updateTable();
 });
@@ -62,30 +64,35 @@ document.getElementById("itemsPerPage").addEventListener("change", function () {
 });
 
 function updatePagination() {
-  var totalPages = Math.ceil(storedConferenceData.length / itemsPerPage);
-  var pageNumbersContainer = document.querySelector(".page-numbers");
-  pageNumbersContainer.innerHTML = "";
+  if (storedConferenceData && storedConferenceData.length > 0) {
+    var totalPages = Math.ceil(storedConferenceData.length / itemsPerPage);
+    var pageNumbersContainer = document.querySelector(".page-numbers");
+    pageNumbersContainer.innerHTML = "";
 
-  var startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
-  var endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+    var startPage = Math.max(
+      1,
+      currentPage - Math.floor(maxVisibleButtons / 2)
+    );
+    var endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
 
-  for (let i = startPage; i <= endPage; i++) {
-    (function (pageNumber) {
-      var pageNumberElement = document.createElement("span");
-      pageNumberElement.classList.add("page-number");
+    for (let i = startPage; i <= endPage; i++) {
+      (function (pageNumber) {
+        var pageNumberElement = document.createElement("span");
+        pageNumberElement.classList.add("page-number");
 
-      pageNumberElement.textContent = pageNumber;
-      pageNumberElement.addEventListener("click", function () {
-        currentPage = pageNumber;
-        updateTable();
-      });
+        pageNumberElement.textContent = pageNumber;
+        pageNumberElement.addEventListener("click", function () {
+          currentPage = pageNumber;
+          updateTable();
+        });
 
-      if (pageNumber === currentPage) {
-        pageNumberElement.classList.add("current");
-      }
+        if (pageNumber === currentPage) {
+          pageNumberElement.classList.add("current");
+        }
 
-      pageNumbersContainer.appendChild(pageNumberElement);
-    })(i);
+        pageNumbersContainer.appendChild(pageNumberElement);
+      })(i);
+    }
   }
 }
 
