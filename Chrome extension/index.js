@@ -147,13 +147,17 @@ function updateTable() {
           secondsStart < 10 ? "0" : ""
         }${secondsStart}`;
 
-        const formattedTimeEnd =
-          conferenceEndTimeObject !== ""
-            ? `${hoursEnd < 10 ? "0" : ""}${hoursEnd}:${
-                minutesEnd < 10 ? "0" : ""
-              }${minutesEnd}:${secondsEnd < 10 ? "0" : ""}${secondsEnd}`
-            : "";
-
+        let formattedTimeEnd = "";
+        if (element.conferenceEndTime !== null) {
+          formattedTimeEnd = formattedTimeEnd = `${
+            hoursEnd < 10 ? "0" : ""
+          }${hoursEnd}:${minutesEnd < 10 ? "0" : ""}${minutesEnd}:${
+            secondsEnd < 10 ? "0" : ""
+          }${secondsEnd}`;
+        } else {
+          formattedTimeEnd = " ";
+        }
+        
         cellIndex.textContent = tableBody.rows.length;
         cellMeetId.textContent = element.conferenceId;
         if (element.status === "start" || element.status === "in progress") {
@@ -576,6 +580,9 @@ function updatePageTheme(theme) {
   );
   const participantsTableHeaders = document.querySelectorAll(
     "#participantsTable thead th"
+  );
+  const participantsTableRows = document.querySelectorAll(
+    "#participantsTableBody"
   );
   const paginations = document.querySelectorAll(".pagination-container");
   const itemsPerPage = document.getElementById("itemsPerPage");

@@ -421,9 +421,7 @@ label[for="meetingName"] {
   font-weight: bolder;
   text-align: center;
   height: 20%;
-  /* background-color:#919191 ; */
   border-radius: 5px;
-  /* color: #373535; */
 }
 .modal-text-container{
   display: flex;
