@@ -1,54 +1,105 @@
-// background.js
-    
 var storedConferenceData;
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    console.log("Received conference ID:", message.conferenceId);
-    console.log("Conference date", message.conferenceDate);
-    console.log("Conference start time: ", message.conferenceStartTime);
-    console.log("Conference end time: ", message.conferenceEndTime);
-    console.log("Status: ", message.status);
-    console.log("Duration: ", message.callDuration);
-    console.log("Participants: ", message.participants);
+  chrome.storage.local.get({ conferenceData: [] }, function (result) {
+    storedConferenceData = result.conferenceData || [];
+    if (!Array.isArray(storedConferenceData)) {
+      storedConferenceData = [];
+    }
 
-    // Отримання поточних збережених даних
-    chrome.storage.local.get({ 'conferenceData': [] }, function (result) {
-        storedConferenceData = result.conferenceData || [];
-        if (!Array.isArray(storedConferenceData)) {
-            storedConferenceData = [];
-        }
+    if (message.action === "addConference") {
+      addConference(message.newConference);
+    }
 
-        var existingConferenceIndex = storedConferenceData.findIndex(function (data) {
-            return data.conferenceId === message.conferenceId;
-        });
+    if (message.action === "updateParticipants") {
+      updateParticipants(message.conferenceId, message.participants);
+    }
 
-        if (existingConferenceIndex === -1) {
-            storedConferenceData.push({
-                conferenceId: message.conferenceId,
-                conferenceDate: message.conferenceDate,
-                conferenceStartTime: message.conferenceStartTime,
-                conferenceEndTime: message.conferenceEndTime,
-                status: message.status,
-                callDuration: message.callDuration,
-                participants: message.participants
-            });
-        } else {
-            storedConferenceData[existingConferenceIndex] = {
-                conferenceId: message.conferenceId,
-                conferenceDate: message.conferenceDate,
-                conferenceStartTime: message.conferenceStartTime,
-                conferenceEndTime: message.conferenceEndTime,
-                status: message.status,
-                callDuration: message.callDuration,
-                participants: message.participants
-            };
-        }
+    if (message.action === "endConference") {
+      endConference(message.endedConference);
+    }
 
-        chrome.storage.local.set({ 'conferenceData': storedConferenceData }, function () {
-            console.log('Conference data saved.');
-        });
-
-        console.log("____________________________");
-    });
+    if (message.action === "deleteConference") {
+      deleteConference(message.conferenceIdToDelete);
+    }
+  });
 });
 
+function addConference(conference) {
+  var existingConferenceIndex = storedConferenceData.findIndex(function (data) {
+    return data.conferenceId === conference.conferenceId;
+  });
+
+  if (existingConferenceIndex === -1) {
+    storedConferenceData.unshift({
+      conferenceId: conference.conferenceId,
+      conferenceDate: conference.conferenceDate,
+      conferenceStartTime: conference.conferenceStartTime,
+      conferenceEndTime: conference.conferenceEndTime,
+      status: conference.status,
+      callDuration: conference.callDuration,
+      participants: conference.participants,
+    });
+  }
+
+  chrome.storage.local.set({ conferenceData: storedConferenceData });
+}
+
+function updateParticipants(conferenceId, participants) {
+  chrome.storage.local.get("latestConferenceId", function (result) {
+    var latestConferenceId = result.latestConferenceId;
+
+    if (conferenceId !== latestConferenceId) {
+      var conferenceIdToUpdate = storedConferenceData.findIndex(function (
+        data
+      ) {
+        return data.conferenceId === conferenceId;
+      });
+      storedConferenceData[conferenceIdToUpdate].participants = [];
+      participants.forEach((element) => {
+        storedConferenceData[conferenceIdToUpdate].participants.push(element);
+      });
+
+      storedConferenceData[conferenceIdToUpdate].status = "in progress";
+      chrome.storage.local.set({ conferenceData: storedConferenceData });
+    }
+  });
+}
+
+function endConference(conference) {
+  chrome.storage.local.get("latestConferenceId", function (result) {
+    var latestConferenceId = result.latestConferenceId;
+
+    if (conference.conferenceId !== latestConferenceId) {
+      var endedConferenceIndex = storedConferenceData.findIndex(function (
+        data
+      ) {
+        return data.conferenceId === conference.conferenceId;
+      });
+
+      if (storedConferenceData[endedConferenceIndex]) {
+        storedConferenceData[endedConferenceIndex].status = conference.status;
+        storedConferenceData[endedConferenceIndex].conferenceEndTime =
+          conference.conferenceEndTime;
+        storedConferenceData[endedConferenceIndex].callDuration =
+          conference.callDuration;
+        storedConferenceData[endedConferenceIndex].participants = [];
+        conference.participants.forEach((element) => {
+          storedConferenceData[endedConferenceIndex].participants.push(element);
+        });
+        chrome.storage.local.set({ conferenceData: storedConferenceData });
+      }
+    }
+  });
+}
+
+function deleteConference(conferenceId) {
+  var conferenceIndexToDelete = storedConferenceData.findIndex(function (data) {
+    return data.conferenceId === conferenceId;
+  });
+
+  if (conferenceIndexToDelete !== -1) {
+    storedConferenceData.splice(conferenceIndexToDelete, 1);
+    chrome.storage.local.set({ conferenceData: storedConferenceData });
+  }
+}

@@ -359,6 +359,12 @@ font-family: "Montserrat", sans-serif;
 .bold-modal-text{
   font-weight:bold;
 }
+.big-bold-modal-text{
+  font-weight:bold;
+  font-size: 15px;
+    color: whitesmoke;
+    font-family: "Montserrat", sans-serif;
+}
 .close {
   color: #F21170;
   font-size: 28px;
@@ -379,7 +385,7 @@ font-family: "Montserrat", sans-serif;
   justify-content: flex-end;
 }
 
-#saveChangesButton, #deleteButton{
+#saveChangesButton, #deleteButton, #yesButton, #noButton{
   font-family: "Montserrat", sans-serif;
   font-optical-sizing:auto;
   font-size: medium;
@@ -391,14 +397,20 @@ font-family: "Montserrat", sans-serif;
   background-color: transparent;
   width: 40%;
   margin-top: 4%;
+  padding: 1%;
 }
-#saveChangesButton:hover, #deleteButton:hover{
+#saveChangesButton:hover, #deleteButton:hover,  #yesButton:hover, #noButton:hover{
   border: 2px solid #F21170;
   border-radius: 10px;
 }
-label[for="meetingName"], #deleteText {
+label[for="meetingName"] {
+  color: whitesmoke;
+  width: 30%;
+}
+#deleteText {
   color: whitesmoke;
 }
+
 #meetingName{
   outline: none;
   border: none;
@@ -421,4 +433,11 @@ label[for="meetingName"], #deleteText {
 }
 .participant-image{
   border-radius: 50%;
+}
+.modal-buttons-container{
+  display: flex;
+  width: 100%;
+  justify-content:space-between;
+  flex-direction: row;
+  align-items: center;
 }
