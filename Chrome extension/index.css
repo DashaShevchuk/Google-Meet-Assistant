@@ -5,7 +5,7 @@ body{
   /* background-color: #dcdcdc; */
 /* background-color: #EEEEEE; */
 
-    /* background-color: #1c1c1c; */
+    background-color: #1c1c1c;
     display: flex;
     justify-content: center;
 }
@@ -32,7 +32,7 @@ body{
 /* background-color: white; */
 /* background-color: whitesmoke; */
 
-    /* background-color: #373535; */
+    background-color: #373535;
     padding-left: 1%;
     padding-right: 1%;
   }
@@ -77,7 +77,7 @@ body{
 
   .little-text {
     font-size: 15px;
-    /* color: whitesmoke; */
+    color: whitesmoke;
     /* color: black; */
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
@@ -125,13 +125,13 @@ table{
   /* background-color: white; */
   /* background-color: whitesmoke; */
 
-  /* background-color: #373535; */
+  background-color: #373535;
   border-radius: 10px;
 }
 
-  thead th{
+  th{
     font-size: 15px;
-    /* color: whitesmoke; */
+    color: whitesmoke;
     /* color: black; */
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
@@ -140,15 +140,28 @@ table{
     height: 50px;
   }
 
-  tbody tr {
+  tr {
     font-size: 15px;
-    /* color: whitesmoke; */
+    color: #999999;
     /* color: black; */
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
     text-align: center;
     height: 50px;
+  }
+
+  .badge{
+border: 2px solid #FF5200;
+color: #999999;
+font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    font-size: 10px;
   }
 
   .clear-button-container{
@@ -191,7 +204,7 @@ table{
     /* background-color: white; */
     /* background-color: whitesmoke; */
 
-    /* background-color: #373535; */
+    background-color: #373535;
     border-radius: 10px;
     height: 50px;
     margin-top: 1%;
@@ -264,7 +277,7 @@ table{
   /* background-color: white; */
   /* background-color: whitesmoke; */
 
-  /* background-color: #373535; */
+  background-color: #373535;
   border: none;
   margin: 1%;
   box-shadow: none;
@@ -305,7 +318,7 @@ table{
 }
 
 .modal-content {
-  /* background-color: #373535; */
+  background-color: #373535;
   /* background-color: white; */
   border-radius: 10px;
   /* margin: 15% auto; */
@@ -326,7 +339,7 @@ table{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.1%;
+  padding: 0.2%;
 }
 
 .input-container,.text-container{
@@ -345,6 +358,12 @@ table{
 }
 .bold-modal-text{
   font-weight:bold;
+}
+.big-bold-modal-text{
+  font-weight:bold;
+  font-size: 15px;
+    color: whitesmoke;
+    font-family: "Montserrat", sans-serif;
 }
 .close {
   color: #F21170;
@@ -366,7 +385,7 @@ table{
   justify-content: flex-end;
 }
 
-#saveChangesButton, #deleteButton{
+#saveChangesButton, #deleteButton, #yesButton, #noButton{
   font-family: "Montserrat", sans-serif;
   font-optical-sizing:auto;
   font-size: medium;
@@ -378,11 +397,20 @@ table{
   background-color: transparent;
   width: 40%;
   margin-top: 4%;
+  padding: 1%;
 }
-#saveChangesButton:hover, #deleteButton:hover{
+#saveChangesButton:hover, #deleteButton:hover,  #yesButton:hover, #noButton:hover{
   border: 2px solid #F21170;
   border-radius: 10px;
 }
+label[for="meetingName"] {
+  color: whitesmoke;
+  width: 30%;
+}
+#deleteText {
+  color: whitesmoke;
+}
+
 #meetingName{
   outline: none;
   border: none;
@@ -403,4 +431,11 @@ table{
 }
 .participant-image{
   border-radius: 50%;
+}
+.modal-buttons-container{
+  display: flex;
+  width: 100%;
+  justify-content:space-between;
+  flex-direction: row;
+  align-items: center;
 }

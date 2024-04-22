@@ -1,4 +1,5 @@
 let conferenceId = null;
+let isLoged = false;
 let conferenceStartTime = null;
 let conferenceEndTime = null;
 let conferenceDate = null;
@@ -33,26 +34,10 @@ class ParticipantData {
   }
 }
 
-function sendData(status) {
-  const dataToSend = {
-    conferenceId: conferenceId,
-    conferenceStartTime: conferenceStartTime,
-    conferenceDate: conferenceDate,
-    status: status,
-    participants: participantsArray,
-    conferenceEndTime: conferenceEndTime,
-    callDuration: callDuration,
-  };
-
-  chrome.runtime.sendMessage(dataToSend);
-}
-
 function getStartedConferenceData() {
   const now = new Date();
   conferenceStartTime = now;
   conferenceDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-  sendData("start");
 }
 function findImageByVideo(videoElement) {
   let parentDiv = videoElement.parentNode.parentNode.parentNode;
@@ -93,10 +78,14 @@ const endConferenceButtonClick = function () {
         );
       }
       if (element.videoTime === null) {
-        element.videoTime = calculateDuration(
-          element.videoTimeStarted,
-          conferenceEndTime
-        );
+        if (element.videoTimeStarted !== null) {
+          element.videoTime = calculateDuration(
+            element.videoTimeStarted,
+            conferenceEndTime
+          );
+        } else {
+          element.videoTime = "00:00:00";
+        }
         element.isVideoPlaying = false;
       } else {
         const newDuration = calculateDuration(
@@ -109,7 +98,20 @@ const endConferenceButtonClick = function () {
     }
   });
 
-  sendData("end");
+  const endedConference = {
+    conferenceId: conferenceId,
+    conferenceStartTime: conferenceStartTime,
+    conferenceDate: conferenceDate,
+    status: "end",
+    participants: participantsArray,
+    conferenceEndTime: conferenceEndTime,
+    callDuration: callDuration,
+  };
+  chrome.runtime.sendMessage({
+    action: "endConference",
+    endedConference: endedConference,
+  });
+
   eventListenerAdded = true;
 };
 
@@ -126,7 +128,6 @@ function addPartisipant(name, image, timeJoining) {
     false
   );
   participantsArray.push(participantData);
-  sendData("in progress");
 }
 
 if (window.location.href.includes("meet.google.com")) {
@@ -135,7 +136,26 @@ if (window.location.href.includes("meet.google.com")) {
 
   if (window.location.href.includes(conferenceId)) {
     if (!localStorage.getItem(localStorageKey)) {
-      getStartedConferenceData();
+      const now = new Date();
+      conferenceStartTime = now;
+      conferenceDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      );
+      const newConference = {
+        conferenceId: conferenceId,
+        conferenceStartTime: conferenceStartTime,
+        conferenceDate: conferenceDate,
+        status: "start",
+        participants: participantsArray,
+        conferenceEndTime: conferenceEndTime,
+        callDuration: callDuration,
+      };
+      chrome.runtime.sendMessage({
+        action: "addConference",
+        newConference: newConference,
+      });
       localStorage.setItem(localStorageKey, true);
     }
 
@@ -149,6 +169,13 @@ if (window.location.href.includes("meet.google.com")) {
           hostImage.getAttribute("src"),
           conferenceStartTime
         );
+
+        chrome.runtime.sendMessage({
+          action: "updateParticipants",
+          conferenceId: conferenceId,
+          participants: participantsArray,
+        });
+
         clearInterval(checkHost);
       }
     }, 1000);
@@ -217,11 +244,9 @@ if (window.location.href.includes("meet.google.com")) {
       let visibleVideos = document.querySelectorAll(
         "video:not([style*='display: none'])"
       );
-
       let hiddenVideos = document.querySelectorAll(
         "video[style*='display: none']"
       );
-
       visibleVideos.forEach((videoElement) => {
         let img = findImageByVideo(videoElement);
         let imagePath = getImagePathWithoutSize(img);
@@ -277,7 +302,10 @@ if (window.location.href.includes("meet.google.com")) {
                     participant.videoTimeStarted,
                     participant.videoTimeEnded
                   );
-                  participant.videoTime = addDurations(participant.videoTime, newDuration);
+                  participant.videoTime = addDurations(
+                    participant.videoTime,
+                    newDuration
+                  );
                   participant.isVideoPlaying = false;
                 }
               }
@@ -286,7 +314,6 @@ if (window.location.href.includes("meet.google.com")) {
         }
       });
     }, 1000);
-
     setInterval(() => {
       const userEddingMessage = document.querySelector('[jsname="Ota2jd"]');
 
@@ -309,7 +336,6 @@ if (window.location.href.includes("meet.google.com")) {
               wordsWithCapitalLetters.push(word);
             }
           }
-
           const newUserName = wordsWithCapitalLetters.join(" ");
           const newUserImage = newUserImageElement.getAttribute("src");
 
@@ -323,6 +349,11 @@ if (window.location.href.includes("meet.google.com")) {
             if (isUniqueParticipant) {
               const now = new Date();
               addPartisipant(newUserName, newUserImage, now);
+              chrome.runtime.sendMessage({
+                action: "updateParticipants",
+                conferenceId: conferenceId,
+                participants: participantsArray,
+              });
             } else {
               participantsArray.forEach((element) => {
                 if (
@@ -341,9 +372,7 @@ if (window.location.href.includes("meet.google.com")) {
     }, 1000);
 
     const checkEndCallButton = setInterval(() => {
-      const endCallButton = document.querySelector(
-        'button[jsname="CQylAd"]'
-      );
+      const endCallButton = document.querySelector('button[jsname="CQylAd"]');
       if (endCallButton && !eventListenerAdded) {
         clearInterval(checkEndCallButton);
         endCallButton.addEventListener("click", endConferenceButtonClick);

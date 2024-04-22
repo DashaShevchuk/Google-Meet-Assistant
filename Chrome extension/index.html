@@ -1,133 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="script-src 'self' https://cdn.jsdelivr.net;"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Roboto:ital,wght@0,100;1,100&display=swap"
-      rel="stylesheet"
-    />
-    <link href="./index.css" rel="stylesheet" />
-    <title>Google Meet Assistant</title>
-  </head>
-  <body lang="gb" theme="dark">
-    <nav class="navbar">
-      <div>
-        <a class="navbar-brand" href="#">
-          <img src="./large logo.png" width="40" height="40">
-        </a>
-      </div>
-      <div>
-          <button id="themeSwitch">
-            <img src="./icons/moon-solid.svg" width="30" height="30"/>
-          </button>
-          <button id="languageSwitch">
-            <img src="./icons/gb.svg" width="30" height="30" class="language-button-image"/>
-          </button>
-      </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://cdn.jsdelivr.net;" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Roboto:ital,wght@0,100;1,100&display=swap"
+    rel="stylesheet" />
+  <link href="./index.css" rel="stylesheet" />
+  <title>Google Meet Assistant</title>
+</head>
+
+<body lang="gb" theme="dark">
+  <nav class="navbar">
+    <div>
+      <a class="navbar-brand" href="#">
+        <img src="./large logo.png" width="40" height="40">
+      </a>
+    </div>
+    <div>
+      <button id="themeSwitch">
+        <img src="./icons/moon-solid.svg" width="30" height="30" />
+      </button>
+      <button id="languageSwitch">
+        <img src="./icons/gb.svg" width="30" height="30" class="language-button-image" />
+      </button>
+    </div>
   </nav>
-    <div class="content">
-      <div class="title-card">
-        <p class="little-text">Controll your conferences with us</p>
-        <h1 class="big-text">Google Meet Assistant</h1>
-      </div>
-      <div class="clear-button-container">
-        <button class="clear-table-button" id="clearLocalStorageButton" >Clear table
-          <img src="./icons/trash-solid-2.svg" width="20" height="30">
-        </button>
-      </div>
-      <div class="table-container">
-          <table id="conferencesTable">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Time start</th>
-                <th>Time end</th>
-                <th>Participants</th>
-                <th>Duration</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="conferenceTableBody"></tbody>
-          </table>
-      </div>
-     
-      <div class="pagination-container">
-        <a href="#" class="prev">
-          <img src="./icons/left-arrow.svg" width="20" height="30"/>
-        </a>
-        <span class="page-numbers"></span>
-        <a href="#" class="next">
-          <img src="./icons/right-arrow.svg" width="20" height="30"/>
-        </a>
-        <select id="itemsPerPage" onchange="updateTable()">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-      </div>
+
+  <div class="content">
+    <div class="title-card">
+      <p class="little-text">Controll your conferences with us</p>
+      <h1 class="big-text">Google Meet Assistant</h1>
+    </div>
+    <div class="clear-button-container">
+      <button class="clear-table-button" id="clearLocalStorageButton">Clear table
+        <img src="./icons/trash-solid-2.svg" width="20" height="30">
+      </button>
+    </div>
+    <div class="table-container">
+      <table id="conferencesTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Time start</th>
+            <th>Time end</th>
+            <th>Participants</th>
+            <th>Duration</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="conferenceTableBody"></tbody>
+      </table>
     </div>
 
-    <div id="editModal" class="modal">
-      <div class="modal-content-container">
+    <div class="pagination-container">
+      <a href="#" class="prev">
+        <img src="./icons/left-arrow.svg" width="20" height="30" />
+      </a>
+      <span class="page-numbers"></span>
+      <a href="#" class="next">
+        <img src="./icons/right-arrow.svg" width="20" height="30" />
+      </a>
+      <select id="itemsPerPage" onchange="updateTable()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="editModal" class="modal">
+    <div class="modal-content-container">
       <div class="modal-content">
         <div class="modal-button-container">
-        <span id="closeEdit" class="close">&times;</span>
-      </div>
+          <span id="closeEdit" class="close">&times;</span>
+        </div>
         <div class="input-container">
-        <label for="meetingName">New meeting name:</label>
-        <input type="text" id="meetingName">
-      </div>
-      <div class="modal-button-container">
-        <button id="saveChangesButton">Save</button>
-      </div>
-      </div>
-    </div>
-    </div>
-
-    <div id="deleteModal" class="modal">
-      <div class="modal-content-container">
-      <div class="modal-content">
+          <label for="meetingName">New meeting name:</label>
+          <input type="text" id="meetingName">
+        </div>
         <div class="modal-button-container">
-        <span id="closeDelete" class="close">&times;</span>
-      </div>
-      <div class="modal-text-container">
-      <div class="icon-container">
-<img src="./icons/warning.svg"  width="50" height="50"/>
-      </div>
-        <div class="text-container">
-          <p id="deleteText">
-            <span id="deletePrefix"></span>
-            <span class="bold-modal-text" id="conferenceId"></span>
-            <span id="deleteMiddle"></span>
-            <span class="bold-modal-text" id="conferenceDate"></span>
-            <span class="bold-modal-text" id="conferenceTime"></span>
-            <span id="deleteSuffix"></span>
-            <span>?</span>
-          </p>
+          <button id="saveChangesButton">Save</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div id="deleteModal" class="modal">
+    <div class="modal-content-container">
+      <div class="modal-content">
+        <div class="modal-button-container">
+          <span id="closeDelete" class="close">&times;</span>
+        </div>
+        <div class="modal-text-container">
+          <div class="icon-container">
+            <img src="./icons/warning.svg" width="50" height="50" />
+          </div>
+          <div class="text-container">
+            <p id="deleteText">
+              <span id="deletePrefix">Are you sure you want to delete</span>
+              <span class="bold-modal-text" id="conferenceId"></span>
+              <span id="deleteMiddle">from</span>
+              <span class="bold-modal-text" id="conferenceDate"></span>
+              <span class="bold-modal-text" id="conferenceTime"></span>
+              <span>?</span>
+            </p>
+          </div>
+        </div>
         <div class="modal-button-container">
           <button id="deleteButton">Delete</button>
         </div>
       </div>
     </div>
-    </div>
+  </div>
 
-    <div id="participantsModal" class="modal">
-      <div class="modal-content-container">
+  <div id="participantsModal" class="modal">
+    <div class="modal-content-container">
       <div class="modal-content">
         <div class="modal-button-container">
-        <span id="closeParticipants" class="close">&times;</span>
-      </div>
+          <span id="closeParticipants" class="close">&times;</span>
+        </div>
         <div class="participants-table-container">
           <table id="participantsTable">
             <thead>
@@ -142,38 +140,48 @@
             <tbody id="participantsTableBody"></tbody>
           </table>
         </div>
-        
-      <!-- <div class="pagination-container">
-        <a href="#" class="prev-modal">
-          <img src="./icons/left-arrow.svg" width="20" height="30"/>
-        </a>
-        <span class="page-numbers"></span>
-        <a href="#" class="next-modal">
-          <img src="./icons/right-arrow.svg" width="20" height="30"/>
-        </a>
-        <select id="itemsPerModal" onchange="updateParticipants()">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-      </div> -->
-      <div class="pagination-container">
-        <a href="#" class="prev-modal">
-          <img src="./icons/left-arrow.svg" width="20" height="30"/>
-        </a>
-        <span id="participantsPagination" class="page-numbers"></span>
-        <a href="#" class="next-modal">
-          <img src="./icons/right-arrow.svg" width="20" height="30"/>
-        </a>
-        <select id="itemsPerModal" onchange="updateParticipants()">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
+        <div class="pagination-container">
+          <a href="#" class="prev-modal">
+            <img src="./icons/left-arrow.svg" width="20" height="30" />
+          </a>
+          <span id="participantsPagination" class="page-numbers"></span>
+          <a href="#" class="next-modal">
+            <img src="./icons/right-arrow.svg" width="20" height="30" />
+          </a>
+          <select id="itemsPerModal" onchange="updateParticipants()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
       </div>
     </div>
+  </div>
+  <div id="isLogModal" class="modal">
+    <div class="modal-content-container">
+      <div class="modal-content">
+        <div class="modal-text-container">
+          <div class="icon-container">
+            <img src="./icons/circle-question-solid.svg" width="50" height="50" />
+          </div>
+          <div class="text-container">
+            <p class="isLogText">
+              <span id="logModalTextPrefix" class="little-text isLogText">Do you want to log this conference </span>
+              <span id="logModalText" class="big-bold-modal-text isLogText"></span>
+              <span class="little-text isLogText">?</span>
+            </p>
+          </div>
+        </div>
+        <div class="modal-buttons-container">
+          <button id="yesButton">Yes</button>
+          <button id="noButton">No</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script src="./index.js"></script>
-  </body>
+
+  <script src="./index.js"></script>
+</body>
+
 </html>
