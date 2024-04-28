@@ -39,6 +39,7 @@ function getStartedConferenceData() {
   conferenceStartTime = now;
   conferenceDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 }
+
 function findImageByVideo(videoElement) {
   let parentDiv = videoElement.parentNode.parentNode.parentNode;
   if (parentDiv) {
@@ -128,6 +129,43 @@ function addPartisipant(name, image, timeJoining) {
     false
   );
   participantsArray.push(participantData);
+}
+
+function calculateDuration(startTime, endTime) {
+  let duration = Math.abs(startTime - endTime);
+  const hours = Math.floor(duration / 3600000);
+  duration -= hours * 3600000;
+  const minutes = Math.floor(duration / 60000);
+  duration -= minutes * 60000;
+  const seconds = Math.floor(duration / 1000);
+
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(seconds).padStart(2, "0");
+
+  return `${hours}:${formattedMinutes}:${formattedSeconds}`;
+}
+
+function addDurations(time1, time2) {
+  const [hours1, minutes1, seconds1] = time1.split(":").map(Number);
+  const [hours2, minutes2, seconds2] = time2.split(":").map(Number);
+
+  const totalHours = hours1 + hours2;
+  const totalMinutes = minutes1 + minutes2;
+  const totalSeconds = seconds1 + seconds2;
+
+  const extraMinutes = Math.floor(totalSeconds / 60);
+  const remainingSeconds = totalSeconds % 60;
+  const finalMinutes = totalMinutes + extraMinutes;
+
+  const extraHours = Math.floor(finalMinutes / 60);
+  const remainingMinutes = finalMinutes % 60;
+  const finalHours = totalHours + extraHours;
+
+  const formattedHours = String(finalHours).padStart(2, "0");
+  const formattedMinutes = String(remainingMinutes).padStart(2, "0");
+  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
 if (window.location.href.includes("meet.google.com")) {
@@ -314,6 +352,7 @@ if (window.location.href.includes("meet.google.com")) {
         }
       });
     }, 1000);
+
     setInterval(() => {
       const userEddingMessage = document.querySelector('[jsname="Ota2jd"]');
 
@@ -379,41 +418,4 @@ if (window.location.href.includes("meet.google.com")) {
       }
     }, 1000);
   }
-}
-
-function calculateDuration(startTime, endTime) {
-  let duration = Math.abs(startTime - endTime);
-  const hours = Math.floor(duration / 3600000);
-  duration -= hours * 3600000;
-  const minutes = Math.floor(duration / 60000);
-  duration -= minutes * 60000;
-  const seconds = Math.floor(duration / 1000);
-
-  const formattedMinutes = String(minutes).padStart(2, "0");
-  const formattedSeconds = String(seconds).padStart(2, "0");
-
-  return `${hours}:${formattedMinutes}:${formattedSeconds}`;
-}
-
-function addDurations(time1, time2) {
-  const [hours1, minutes1, seconds1] = time1.split(":").map(Number);
-  const [hours2, minutes2, seconds2] = time2.split(":").map(Number);
-
-  const totalHours = hours1 + hours2;
-  const totalMinutes = minutes1 + minutes2;
-  const totalSeconds = seconds1 + seconds2;
-
-  const extraMinutes = Math.floor(totalSeconds / 60);
-  const remainingSeconds = totalSeconds % 60;
-  const finalMinutes = totalMinutes + extraMinutes;
-
-  const extraHours = Math.floor(finalMinutes / 60);
-  const remainingMinutes = finalMinutes % 60;
-  const finalHours = totalHours + extraHours;
-
-  const formattedHours = String(finalHours).padStart(2, "0");
-  const formattedMinutes = String(remainingMinutes).padStart(2, "0");
-  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
-
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }

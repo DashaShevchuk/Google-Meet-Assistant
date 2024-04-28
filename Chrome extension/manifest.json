@@ -24,7 +24,11 @@
   "content_scripts": [
     {
       "matches": ["*://meet.google.com/*"],
-      "js": ["content.js"]
+      "js": ["meet-content.js"]
+    },
+    {
+      "matches": ["*://desk.nuwm.edu.ua/*"],
+      "js": ["journal-content.js"]
     }
   ]
 }

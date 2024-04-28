@@ -438,3 +438,12 @@ label[for="meetingName"] {
   flex-direction: row;
   align-items: center;
 }
+
+#infoModal .modal-content-container {
+  width: 300px;
+}
+
+#infoModal .modal-text-container {
+  display: flex;
+  justify-content: space-between;
+}
