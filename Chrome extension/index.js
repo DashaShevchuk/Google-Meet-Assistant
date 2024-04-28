@@ -164,7 +164,7 @@ function updateTable() {
         } else {
           formattedTimeEnd = " ";
         }
-        
+
         cellIndex.textContent = tableBody.rows.length;
         cellMeetId.textContent = element.conferenceId;
         if (element.status === "start" || element.status === "in progress") {
@@ -184,6 +184,21 @@ function updateTable() {
           element.participants.length +
           '<img src="./icons/user-solid.svg" style="margin-left:5%;" width="20" height="30"/>';
         cellParticipants.appendChild(participants);
+
+        var nuwmButton = document.createElement("button");
+        nuwmButton.classList.add("table-button");
+        nuwmButton.innerHTML =
+          '<img src="./icons/nuwm.svg" width="20" height="30"/>';
+        nuwmButton.setAttribute("data-bs-toggle", "tooltip");
+        nuwmButton.setAttribute("data-bs-placement", "top");
+        nuwmButton.setAttribute("title", "Mark those present");
+        nuwmButton.addEventListener("click", function () {
+          chrome.runtime.sendMessage({
+            action: "markThosePresent",
+            conferenceParticipants: element.participants,
+          });
+          document.getElementById("infoModal").style.display = "flex";
+        });
 
         var editButton = document.createElement("button");
         editButton.classList.add("table-button");
@@ -378,6 +393,7 @@ function updateTable() {
         cellAction.appendChild(editButton);
         cellAction.appendChild(deleteButton);
         cellAction.appendChild(showParticipantsButton);
+        cellAction.appendChild(nuwmButton);
 
         cellAction.classList.add("d-flex", "justify-content-center");
         updateModalPagination();
@@ -391,6 +407,9 @@ document.getElementById("closeEdit").addEventListener("click", function () {
 });
 document.getElementById("closeDelete").addEventListener("click", function () {
   document.getElementById("deleteModal").style.display = "none";
+});
+document.getElementById("closeInfo").addEventListener("click", function () {
+  document.getElementById("infoModal").style.display = "none";
 });
 document
   .getElementById("closeParticipants")
@@ -495,6 +514,7 @@ function updatePageText(lang) {
   const logModalTextPrefix = document.getElementById("logModalTextPrefix");
   const yesButton = document.getElementById("yesButton");
   const noButton = document.getElementById("noButton");
+  const infoText = document.querySelector("#infoText");
 
   if (lang === "ua") {
     littleTextElement.textContent = "Керуйте своїми конференціями з нами";
@@ -535,6 +555,7 @@ function updatePageText(lang) {
     logModalTextPrefix.innerHTML = "Чи хочете ви додати конференцію";
     yesButton.textContent = "Так";
     noButton.textContent = "Ні";
+    infoText.textContent = "Студентів відмічено";
   } else {
     littleTextElement.textContent = "Controll your conferences with us";
     clearTableButton.innerHTML =
@@ -574,6 +595,7 @@ function updatePageText(lang) {
     logModalTextPrefix.innerHTML = "Do you want to log this conference";
     yesButton.textContent = "Yes";
     noButton.textContent = "No";
+    infoText.textContent = " Students were marked";
   }
 }
 
@@ -601,6 +623,7 @@ function updatePageTheme(theme) {
   const deleteText = document.querySelectorAll("#deleteText");
   const isLogText = document.querySelectorAll(".isLogText");
   const isLogModalPrefix = document.querySelector("#logModalTextPrefix");
+  const infoText = document.querySelector("#infoText");
 
   if (theme === "dark") {
     body.style.backgroundColor = "#1c1c1c";
@@ -631,6 +654,7 @@ function updatePageTheme(theme) {
       text.style.color = "whitesmoke";
     });
     isLogModalPrefix.style.color = "whitesmoke";
+    infoText.style.color = "whitesmoke";
   } else {
     body.style.backgroundColor = "#DDDDDD";
     navbar.style.backgroundColor = "#EEEEEE";
@@ -660,6 +684,7 @@ function updatePageTheme(theme) {
       text.style.color = "#1c1c1c";
     });
     isLogModalPrefix.style.color = "#1c1c1c";
+    infoText.style.color = "#1c1c1c";
   }
 }
 
