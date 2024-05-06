@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       deleteConference(message.conferenceIdToDelete);
     }
 
-    if(message.action === "markThosePresent"){
+    if (message.action === "markThosePresent") {
       markThosePresent(message.conferenceParticipants);
     }
   });
@@ -108,15 +108,16 @@ function deleteConference(conferenceId) {
   }
 }
 
-
 function markThosePresent(conferenceParticipantsArr) {
-  chrome.tabs.query({}, function(tabs) {
+  chrome.tabs.query({}, function (tabs) {
     for (let i = 0; i < tabs.length; i++) {
-      // Check if the tab's URL matches the local file path
-      if (tabs[i].url && tabs[i].url.startsWith("file:///C:/Users/user/Desktop/marks")) {
+      if (
+        tabs[i].url &&
+        tabs[i].url.startsWith("desk.nuwm.edu.ua")
+      ) {
         chrome.tabs.sendMessage(tabs[i].id, {
           action: "markPresent",
-          conferenceParticipants: conferenceParticipantsArr
+          conferenceParticipants: conferenceParticipantsArr,
         });
       }
     }
