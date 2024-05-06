@@ -4,7 +4,7 @@ var itemsPerPage = localStorage.getItem("itemsPerPage") || 5;
 var itemsPerModal = localStorage.getItem("itemsPerModal") || 5;
 var maxVisibleButtons = 5;
 var storedConferenceData = [];
-var selectedConferenceParticipants = [];
+var storedParticipantData = [];
 var selectedConferenceId = " ";
 
 function clearTable() {
@@ -13,6 +13,7 @@ function clearTable() {
     tableBody.removeChild(tableBody.firstChild);
   }
 }
+
 function clearParticipants() {
   var tableBody = document.getElementById("participantsTableBody");
   while (tableBody.firstChild) {
@@ -24,6 +25,7 @@ document.getElementById("yesButton").addEventListener("click", function () {
   document.getElementById("isLogModal").style.display = "none";
   updateTable();
 });
+
 document.getElementById("noButton").addEventListener("click", function () {
   document.getElementById("isLogModal").style.display = "none";
   var storedLatestConferenceId = localStorage.getItem("latestConferenceId");
@@ -63,10 +65,90 @@ document.getElementById("itemsPerPage").addEventListener("change", function () {
   updateTable();
 });
 
+document
+  .getElementById("itemsPerModal")
+  .addEventListener("change", function () {
+    itemsPerModal = parseInt(this.value, 10);
+    localStorage.setItem("itemsPerModal", itemsPerModal.toString());
+    updateParticipants();
+  });
+
+function updateModalPagination() {
+  if (storedParticipantData && storedParticipantData.length > 0) {
+    var totalPages = Math.ceil(storedParticipantData.length / itemsPerModal);
+    var pageNumbersContainer = document.querySelector(
+      "#participantsPagination"
+    );
+    pageNumbersContainer.innerHTML = "";
+
+    var startPage = Math.max(
+      1,
+      currentModalPage - Math.floor(maxVisibleButtons / 2)
+    );
+    var endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      (function (pageNumber) {
+        var pageNumberElement = document.createElement("span");
+        pageNumberElement.classList.add("page-number");
+
+        pageNumberElement.textContent = pageNumber;
+        pageNumberElement.addEventListener("click", function () {
+          currentModalPage = pageNumber;
+          updateParticipants();
+        });
+
+        if (pageNumber === currentModalPage) {
+          pageNumberElement.classList.add("current");
+        }
+
+        pageNumbersContainer.appendChild(pageNumberElement);
+      })(i);
+    }
+  }
+}
+
+function updateParticipants() {
+  if (storedParticipantData && storedParticipantData.length > 0) {
+    clearParticipants();
+    var startIndex = parseInt((currentModalPage - 1) * itemsPerModal);
+    var endIndex = parseInt(startIndex + itemsPerModal);
+    console.log("items per modal", itemsPerModal, "   ", startIndex, endIndex);
+    storedParticipantData.slice(startIndex, endIndex).forEach((element) => {
+      if (element) {
+        var participantsTableBody = document.getElementById(
+          "participantsTableBody"
+        );
+        var newParticipantRow = participantsTableBody.insertRow();
+
+        var cellIndex = newParticipantRow.insertCell(0);
+        var cellImage = newParticipantRow.insertCell(1);
+        var cellName = newParticipantRow.insertCell(2);
+        var cellTimeInConference = newParticipantRow.insertCell(3);
+        var cellTimeWithCamera = newParticipantRow.insertCell(4);
+
+        cellIndex.textContent = participantsTableBody.rows.length;
+        cellName.textContent = element.name;
+        cellTimeInConference.textContent = element.timeInConference;
+        cellTimeWithCamera.textContent = element.videoTime;
+
+        var image = document.createElement("img");
+        image.classList.add("participant-image");
+        image.setAttribute("src", element.image);
+        image.setAttribute("width", 60);
+        image.setAttribute("height", 60);
+
+        cellImage.appendChild(image);
+      }
+    });
+  }
+  updateModalPagination();
+}
+
 function updatePagination() {
   if (storedConferenceData && storedConferenceData.length > 0) {
     var totalPages = Math.ceil(storedConferenceData.length / itemsPerPage);
-    var pageNumbersContainer = document.querySelector(".page-numbers");
+    var pageNumbersContainer = document.querySelector("#conferencesPagination");
     pageNumbersContainer.innerHTML = "";
 
     var startPage = Math.max(
@@ -235,6 +317,7 @@ function updateTable() {
             }
           );
         };
+
         var deleteButton = document.createElement("button");
         deleteButton.classList.add("table-button");
         deleteButton.innerHTML =
@@ -279,116 +362,12 @@ function updateTable() {
         showParticipantsButton.setAttribute("data-bs-toggle", "tooltip");
         showParticipantsButton.setAttribute("data-bs-placement", "top");
         showParticipantsButton.setAttribute("title", "Show participants");
-        function goToPreviousPageModal() {
-          if (currentModalPage > 1) {
-            currentModalPage--;
-            updateParticipants();
-          }
-        }
-
-        function goToNextPageModal() {
-          var totalPages = Math.ceil(
-            element.participants.length / itemsPerModal
-          );
-          if (currentModalPage < totalPages) {
-            currentModalPage++;
-            updateParticipants();
-          }
-        }
-
-        var prevModalButton = document.querySelector(".prev-modal");
-        var nextModalButton = document.querySelector(".next-modal");
-        var itemsPerModalSelect = document.getElementById("itemsPerModal");
-
-        if (prevModalButton) {
-          prevModalButton.addEventListener("click", goToPreviousPageModal);
-        }
-
-        if (nextModalButton) {
-          nextModalButton.addEventListener("click", goToNextPageModal);
-        }
-
-        if (itemsPerModalSelect) {
-          itemsPerModalSelect.addEventListener("change", function () {
-            itemsPerModal = parseInt(this.value, 10);
-            localStorage.setItem("itemsPerModal", itemsPerModal.toString());
-            updateParticipants();
-          });
-        }
-        function updateModalPagination() {
-          var totalPages = Math.ceil(
-            storedConferenceData[currentPage - 1].participants.length /
-              itemsPerModal
-          );
-          var pageNumbersContainer = document.getElementById(
-            "participantsPagination"
-          );
-          pageNumbersContainer.innerHTML = "";
-
-          var startPage = Math.max(
-            1,
-            currentModalPage - Math.floor(maxVisibleButtons / 2)
-          );
-          var endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
-
-          for (let i = startPage; i <= endPage; i++) {
-            (function (pageNumber) {
-              var pageNumberElement = document.createElement("span");
-              pageNumberElement.classList.add("page-number");
-
-              pageNumberElement.textContent = pageNumber;
-              pageNumberElement.addEventListener("click", function () {
-                currentModalPage = pageNumber;
-                updateParticipants();
-              });
-
-              if (pageNumber === currentModalPage) {
-                pageNumberElement.classList.add("current");
-              }
-
-              pageNumbersContainer.appendChild(pageNumberElement);
-            })(i);
-          }
-        }
-
-        function updateParticipants() {
-          clearParticipants();
+        showParticipantsButton.addEventListener("click", function () {
           document.getElementById("participantsModal").style.display = "flex";
-          var startIndex = (currentModalPage - 1) * itemsPerModal;
-          var endIndex = startIndex + itemsPerModal;
-
-          element.participants
-            .slice(startIndex, endIndex)
-            .forEach((participant) => {
-              if (participant) {
-                var participantsTableBody = document.getElementById(
-                  "participantsTableBody"
-                );
-                var newParticipantRow = participantsTableBody.insertRow();
-
-                var cellIndex = newParticipantRow.insertCell(0);
-                var cellImage = newParticipantRow.insertCell(1);
-                var cellName = newParticipantRow.insertCell(2);
-                var cellTimeInConference = newParticipantRow.insertCell(3);
-                var cellTimeWithCamera = newParticipantRow.insertCell(4);
-
-                cellIndex.textContent = participantsTableBody.rows.length;
-                cellName.textContent = participant.name;
-                cellTimeInConference.textContent = participant.timeInConference;
-                cellTimeWithCamera.textContent = participant.videoTime;
-
-                var image = document.createElement("img");
-                image.classList.add("participant-image");
-                image.setAttribute("src", participant.image);
-                image.setAttribute("width", 60);
-                image.setAttribute("height", 60);
-
-                cellImage.appendChild(image);
-              }
-            });
-        }
-
-        showParticipantsButton.addEventListener("click", updateParticipants);
+          storedParticipantData = element.participants;
+          console.log(storedParticipantData);
+          updateParticipants();
+        });
 
         cellAction.appendChild(editButton);
         cellAction.appendChild(deleteButton);
@@ -396,27 +375,31 @@ function updateTable() {
         cellAction.appendChild(nuwmButton);
 
         cellAction.classList.add("d-flex", "justify-content-center");
-        updateModalPagination();
       }
     });
   }
   updatePagination();
 }
+
 document.getElementById("closeEdit").addEventListener("click", function () {
   document.getElementById("editModal").style.display = "none";
 });
+
 document.getElementById("closeDelete").addEventListener("click", function () {
   document.getElementById("deleteModal").style.display = "none";
 });
+
 document.getElementById("closeInfo").addEventListener("click", function () {
   document.getElementById("infoModal").style.display = "none";
 });
+
 document
   .getElementById("closeParticipants")
   .addEventListener("click", function () {
     document.getElementById("participantsModal").style.display = "none";
     document.getElementById("participantsTableBody").innerHTML = " ";
   });
+
 function goToPreviousPage() {
   if (currentPage > 1) {
     currentPage--;
@@ -432,8 +415,30 @@ function goToNextPage() {
   }
 }
 
+function goToPreviousPageModal() {
+  if (currentModalPage > 1) {
+    currentModalPage--;
+    updateParticipants();
+  }
+}
+
+function goToNextPageModal() {
+  var totalPages = Math.ceil(storedParticipantData.length / itemsPerModal);
+  if (currentModalPage < totalPages) {
+    currentModalPage++;
+    updateParticipants();
+  }
+}
+
 document.querySelector(".prev").addEventListener("click", goToPreviousPage);
 document.querySelector(".next").addEventListener("click", goToNextPage);
+
+document
+  .querySelector(".prev-modal")
+  .addEventListener("click", goToPreviousPageModal);
+document
+  .querySelector(".next-modal")
+  .addEventListener("click", goToNextPageModal);
 
 document
   .getElementById("clearLocalStorageButton")
@@ -609,9 +614,6 @@ function updatePageTheme(theme) {
   );
   const participantsTableHeaders = document.querySelectorAll(
     "#participantsTable thead th"
-  );
-  const participantsTableRows = document.querySelectorAll(
-    "#participantsTableBody"
   );
   const paginations = document.querySelectorAll(".pagination-container");
   const itemsPerPage = document.getElementById("itemsPerPage");
