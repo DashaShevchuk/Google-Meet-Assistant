@@ -365,18 +365,21 @@ if (window.location.href.includes("meet.google.com")) {
           );
 
           const newUserNameElementText = newUserNameElement.innerHTML;
-          let wordsWithCapitalLetters = [];
 
-          let words = newUserNameElementText.split(" ");
+          let newUserName;
+          let regexEng = /([\u0400-\u04FF\s]+)\s+joined/;
+          let regexUa = /Приєднується\s+([\u0400-\u04FF\s]+)/;
 
-          for (let i = 0; i < words.length; i++) {
-            let word = words[i];
-            if (/^\p{Lu}/u.test(word)) {
-              wordsWithCapitalLetters.push(word);
-            }
+          let matchEng = newUserNameElementText.match(regexEng);
+          let matchUa = newUserNameElementText.match(regexUa);
+
+          if (matchEng) {
+            newUserName = matchEng[1];
+          } else if (matchUa) {
+            newUserName = matchUa[1];
           }
-          const newUserName = wordsWithCapitalLetters.join(" ");
-          const newUserImage = newUserImageElement.getAttribute("src");
+
+          let newUserImage = newUserImageElement.getAttribute("src");
 
           if (newUserName && newUserImage) {
             const isUniqueParticipant = !participantsArray.some(

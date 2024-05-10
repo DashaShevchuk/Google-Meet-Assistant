@@ -113,7 +113,7 @@ function markThosePresent(conferenceParticipantsArr) {
     for (let i = 0; i < tabs.length; i++) {
       if (
         tabs[i].url &&
-        tabs[i].url.startsWith("desk.nuwm.edu.ua")
+        tabs[i].url.startsWith("https://desk.nuwm.edu.ua/")
       ) {
         chrome.tabs.sendMessage(tabs[i].id, {
           action: "markPresent",
