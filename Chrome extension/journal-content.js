@@ -2,6 +2,7 @@ var conferenceParticipants = [];
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.action === "markPresent") {
+   
     const loadParticipantsPromise = new Promise((resolve, reject) => {
       message.conferenceParticipants.forEach((element) => {
         const participantName = element.name;
@@ -10,6 +11,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       resolve();
     });
 
+    console.log(conferenceParticipants);
     loadParticipantsPromise.then(() => {
       const studentRows = document.querySelectorAll("tr");
 

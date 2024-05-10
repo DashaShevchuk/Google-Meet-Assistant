@@ -113,7 +113,6 @@ function updateParticipants() {
     clearParticipants();
     var startIndex = parseInt((currentModalPage - 1) * itemsPerModal);
     var endIndex = parseInt(startIndex + itemsPerModal);
-    console.log("items per modal", itemsPerModal, "   ", startIndex, endIndex);
     storedParticipantData.slice(startIndex, endIndex).forEach((element) => {
       if (element) {
         var participantsTableBody = document.getElementById(
@@ -365,7 +364,6 @@ function updateTable() {
         showParticipantsButton.addEventListener("click", function () {
           document.getElementById("participantsModal").style.display = "flex";
           storedParticipantData = element.participants;
-          console.log(storedParticipantData);
           updateParticipants();
         });
 
