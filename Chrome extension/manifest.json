@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Google Meet Assistant",
-  "version": "1.0",
-  "description": "Боберчик, що допомагає вам зібрати інформацію про Google Meet конференцію",
-  "permissions": ["storage", "alarms", "activeTab", "tabs"],
+  "version": "2.0",
+  "description": "Beaver, which helps you collect information about a Google Meet conference",
+  "permissions": ["storage", "tabs"],
   "background": {
     "service_worker": "background.js"
   },
@@ -23,7 +23,11 @@
   "content_scripts": [
     {
       "matches": ["*://meet.google.com/*"],
-      "js": ["content.js"]
+      "js": ["meet-content.js"]
+    },
+    {
+      "matches": ["*://desk.nuwm.edu.ua/*"],
+      "js": ["journal-content.js"]
     }
   ]
 }
