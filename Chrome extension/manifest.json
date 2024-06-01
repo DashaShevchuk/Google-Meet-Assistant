@@ -1,10 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Google Meet Assistant",
-  "version": "1.0",
+  "version": "2.0",
   "description": "Beaver, which helps you collect information about a Google Meet conference",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuq4tCtki8G79aR1yHVr5MgtPCUjJLYjSgUtfKlxyxaGOkjzIGLzPbHCVdMnX0cckBlSS5rUh5IgaFzxfK7T9NjXAQKzvDbJn19q06nEWPDfpeybPNHuy03Z2AmSHIvbhpJufHoRZrA0gDkE1ZiO6Mc0VJ/3xUC6z/TYwFyIk12lZE8KetaD8ZcCtyokqSf1PILMn0u6zF5gZqYpJz23OR7z7ViYVwyzRMEe3kduLF3pyOTeZHmvBEPKUkq4OJ4CwzEQLzoVI1Z5tDgcVIFqJhHsvjmlA+c4SJup5UiY5xR8/AAQWDOyR8R8vGPbGcL20gAqs7qY+9uNh3ABIuTGGjwIDAQAB",
-  "permissions": ["storage", "alarms", "activeTab", "tabs"],
+  "permissions": ["storage", "tabs"],
   "background": {
     "service_worker": "background.js"
   },

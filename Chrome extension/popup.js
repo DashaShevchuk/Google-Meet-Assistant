@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function changeTheme(language) {
+  function changeTheme(theme) {
     var body = document.querySelector("body");
     var text = document.querySelector(".little-text");
     var content = document.querySelector(".content");
-    if (language === "dark") {
+    if (theme === "dark") {
       body.style.backgroundColor = "#373535";
       content.style.backgroundColor = "#373535";
       text.style.color = "whitesmoke";
