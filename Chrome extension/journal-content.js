@@ -11,7 +11,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       resolve();
     });
 
-    console.log(conferenceParticipants);
     loadParticipantsPromise.then(() => {
       const studentRows = document.querySelectorAll("tr");
 
@@ -31,7 +30,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     });
   }
 });
-
 function rearrangeName(name) {
   const words = name.split(" ");
   if (words.length > 1) {
